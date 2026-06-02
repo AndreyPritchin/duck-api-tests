@@ -75,6 +75,9 @@ public class DuckDeleteTest extends TestNGCitrusSpringSupport {
                 .receive()
                 .response(HttpStatus.OK)
                 .message()
-                .type(MessageType.JSON));
+                .type(MessageType.JSON)
+                .body("{\n" +
+                "  \"message\": \"Duck is deleted\"\n" +
+                "}"));
     }
 }

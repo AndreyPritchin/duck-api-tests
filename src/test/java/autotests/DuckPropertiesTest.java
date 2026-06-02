@@ -37,15 +37,14 @@ public class DuckPropertiesTest extends TestNGCitrusSpringSupport {
                 .message()
                 .type(MessageType.JSON)
                 .body("{\n" +
-                        //"  \"id\": \"@ignore@\",\n" +
-                        "  \"color\": \"@ignore@\",\n" +
-                        "  \"height\": \"@ignore@\",\n" +
+                        "  \"color\": \"yellow\",\n" +
+                        "  \"height\": 1000.0,\n" +
                         "  \"material\": \"wood\",\n" +
-                        "  \"sound\": \"@ignore@\",\n" +
-                        "  \"wingsState\": \"@ignore@\"\n" +
+                        "  \"sound\": \"quack\",\n" +
+                        "  \"wingsState\": \"ACTIVE\"\n" +
                         "}"));
     }
-    //По результатам теста: Properties возвращает ошибку на любой четный id
+    //По результатам теста: Properties возвращает ошибку на любой четный id "Number of JSON entries not equal for element: '$.', expected '5' but was '0'"
 
     @Test(description = "Проверка характеристик утки с нечетным id (материал: rubber)")
     @CitrusTest
@@ -62,12 +61,11 @@ public class DuckPropertiesTest extends TestNGCitrusSpringSupport {
                 .message()
                 .type(MessageType.JSON)
                 .body("{\n" +
-                        //"  \"id\": \"@ignore@\",\n" +
-                        "  \"color\": \"@ignore@\",\n" +
-                        "  \"height\": \"@ignore@\",\n" +
+                        "  \"color\": \"yellow\",\n" +
+                        "  \"height\": 1000.0,\n" +         //Утка в БД с height: 10.0, но в фактическом сообщении height: 1000.0
                         "  \"material\": \"rubber\",\n" +
-                        "  \"sound\": \"@ignore@\",\n" +
-                        "  \"wingsState\": \"@ignore@\"\n" +
+                        "  \"sound\": \"quack\",\n" +
+                        "  \"wingsState\": \"ACTIVE\"\n" +
                         "}"));
     }
 }

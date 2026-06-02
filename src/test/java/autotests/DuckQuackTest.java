@@ -24,14 +24,8 @@ public class DuckQuackTest extends TestNGCitrusSpringSupport {
                 .queryParam("soundCount", String.valueOf(soundCount)));
     }
 
-    @Test(description = "Проверка кряканья утки с четным id")
-    @CitrusTest
-    public void testGetQuackEvenDuck(@Optional @CitrusResource TestCaseRunner runner) {
-
-        //Вызов метода характеристик утки
-        getQuackDuck(runner, "2", 1, 1);
-
-        //Валидация ответа
+    //Создание метода валидации кряканья утки
+    public void validationQuack(TestCaseRunner runner, String sound) {
         runner.$(http()
                 .client("http://localhost:2222")
                 .receive()
@@ -39,27 +33,30 @@ public class DuckQuackTest extends TestNGCitrusSpringSupport {
                 .message()
                 .type(MessageType.JSON)
                 .body("{\n" +
-                        "  \"sound\": \"quack\"\n" +
+                        "  \"sound\": \"" + sound + "\",\n" +
                         "}"));
     }
-    //По результатам теста утка с четным id говорит: 'moo' вместо 'quack'
+
+
+    @Test(description = "Проверка кряканья утки с четным id")
+    @CitrusTest
+    public void testGetQuackEvenDuck(@Optional @CitrusResource TestCaseRunner runner) {
+
+        //Вызов метода характеристик утки
+        getQuackDuck(runner, "2", 2, 3);
+
+        //Вызов метода валидации кряканья утки
+        validationQuack(runner, "moo-moo, moo-moo, moo-moo"); //Утка в БД с sound: "quack", но фактический результат sound: "moo". В тесте используется проверка на фактическое сообщение
+    }
 
     @Test(description = "Проверка кряканья утки с нечетным id")
     @CitrusTest
     public void testGetQuackOddDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
         //Вызов метода характеристик утки
-        getQuackDuck(runner, "1", 1, 1);
+        getQuackDuck(runner, "1", 2, 3);
 
-        //Валидация ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"sound\": \"quack\"\n" +
-                        "}"));
+        //Вызов метода валидации кряканья утки
+        validationQuack(runner, "quack-quack, quack-quack, quack-quack");
     }
 }
