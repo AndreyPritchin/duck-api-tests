@@ -13,7 +13,7 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
     @Autowired
     protected HttpClient duckService;
 
-    //Создание метода для поплыва утки
+    //Метод поплыва утки
     public void getSwimDuck(TestCaseRunner runner, String id) {
         runner.$(http()
                 .client(duckService)
@@ -22,12 +22,23 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
                 .queryParam("id", id));
     }
 
-    //Создание метода для полета утки
+    //Метод полета утки
     public void getFlyDuck(TestCaseRunner runner, String id) {
         runner.$(http()
                 .client(duckService)
                 .send()
                 .get("/api/duck/action/fly")
                 .queryParam("id", id));
+    }
+
+    //Метод кряканья утки
+    public void getQuackDuck(TestCaseRunner runner, String id, int repetitionCount, int soundCount) {
+        runner.$(http()
+                .client(duckService)
+                .send()
+                .get("/api/duck/action/quack")
+                .queryParam("id", id)
+                .queryParam("repetitionCount", String.valueOf(repetitionCount))
+                .queryParam("soundCount", String.valueOf(soundCount)));
     }
 }
