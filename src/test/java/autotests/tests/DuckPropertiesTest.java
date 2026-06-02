@@ -1,7 +1,7 @@
 package autotests.tests;
 
 import autotests.EndpointConfig;
-import autotests.clients.DuckControllerClient;
+import autotests.clients.DuckActionsClient;
 import autotests.clients.DuckValidationClient;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
@@ -13,20 +13,20 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-@ContextConfiguration(classes = {EndpointConfig.class, DuckControllerClient.class, DuckValidationClient.class})
+@ContextConfiguration(classes = {EndpointConfig.class, DuckValidationClient.class, DuckActionsClient.class})
 public class DuckPropertiesTest extends TestNGCitrusSpringSupport {
 
     @Autowired
-    private DuckControllerClient duckControllerClient;
-    @Autowired
     private DuckValidationClient duckValidationClient;
+    @Autowired
+    private DuckActionsClient duckActionsClient;
 
     @Test(description = "Проверка характеристик утки с четным id (материал: wood)")
     @CitrusTest
     public void testGetPropertiesEvenDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
         //Вызов метода характеристик утки
-        duckControllerClient.getPropertiesDuck(runner, "2");
+        duckActionsClient.getPropertiesDuck(runner, "2");
 
         //Валидация ответа
         /*duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
@@ -45,7 +45,7 @@ public class DuckPropertiesTest extends TestNGCitrusSpringSupport {
     public void testGetPropertiesOddDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
         //Вызов метода характеристик утки
-        duckControllerClient.getPropertiesDuck(runner, "1");
+        duckActionsClient.getPropertiesDuck(runner, "1");
 
         //Валидация ответа
         duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +

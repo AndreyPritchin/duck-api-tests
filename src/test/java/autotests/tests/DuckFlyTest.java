@@ -43,7 +43,6 @@ public class DuckFlyTest extends TestNGCitrusSpringSupport {
         duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
                 "  \"message\": \"I am flying :)\"\n" + //В требованиях написано - Body: { “message”: “I’m flying”}, но фактический результат - I am flying :). В тесте используется проверка на фактическое сообщение
                 "}");
-
     }
 
     @Test(description = "Проверка характеристик утки со связанными крыльями")
@@ -62,10 +61,9 @@ public class DuckFlyTest extends TestNGCitrusSpringSupport {
         duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
                 "  \"message\": \"I can not fly :C\"\n" + //В требованиях написано - Body: { “message”: “I can’t fly”}, но фактический результат - I can not fly :C. В тесте используется проверка на фактическое сообщение
                 "}");
-
     }
 
-    @Test(description = "Проверка характеристик утки со неопределенным состоянием крыльев")
+    @Test(description = "Проверка характеристик утки с неопределенным состоянием крыльев")
     @CitrusTest
     public void testGetFlyUndefinedDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
@@ -81,6 +79,5 @@ public class DuckFlyTest extends TestNGCitrusSpringSupport {
         duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
                 "  \"message\": \"Wings are not detected :(\"\n" + //Фактический результат - Wings are not detected :(. В тесте используется проверка на фактическое сообщение
                 "}");
-
     }
 }

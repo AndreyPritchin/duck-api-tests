@@ -52,7 +52,7 @@ public class DuckUpdateTest extends TestNGCitrusSpringSupport {
         String duckId = idExtractClient.idExtract(runner);
 
         //Вызов метода для обновления утки
-        duckControllerClient.updateDuck(runner, "${duckId}", "green", 5, "wood", "KuKu", "ACTIVE");
+        duckControllerClient.updateDuck(runner, "${duckId}", "green", 10.0, "wood", "KuKu", "ACTIVE");
 
         //Валидация ответа
         duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +

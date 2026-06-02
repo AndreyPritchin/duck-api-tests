@@ -15,15 +15,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-@ContextConfiguration(classes = {EndpointConfig.class, DuckControllerClient.class, DuckValidationClient.class, IdExtractClient.class, DuckActionsClient.class})
+@ContextConfiguration(classes = {EndpointConfig.class, DuckValidationClient.class, DuckActionsClient.class})
 public class DuckQuackTest extends TestNGCitrusSpringSupport {
 
     @Autowired
-    private DuckControllerClient duckControllerClient;
-    @Autowired
     private DuckValidationClient duckValidationClient;
-    @Autowired
-    private IdExtractClient idExtractClient;
     @Autowired
     private DuckActionsClient duckActionsClient;
 
@@ -44,10 +40,10 @@ public class DuckQuackTest extends TestNGCitrusSpringSupport {
     @CitrusTest
     public void testGetQuackOddDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
-        //Вызов метода характеристик утки
+        //Вызов метода кряканья утки
         duckActionsClient.getQuackDuck(runner, "1", 2, 3);
 
-        //Вызов метода валидации кряканья утки
+        //Вызов метода валидации
         duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
                 "  \"sound\": \"" + "quack-quack, quack-quack, quack-quack" + "\",\n" +
                 "}");

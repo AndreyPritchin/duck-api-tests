@@ -41,4 +41,13 @@ public class DuckActionsClient extends TestNGCitrusSpringSupport {
                 .queryParam("repetitionCount", String.valueOf(repetitionCount))
                 .queryParam("soundCount", String.valueOf(soundCount)));
     }
+
+    //Метод для показа характеристик утки
+    public void getPropertiesDuck(TestCaseRunner runner, String id) {
+        runner.$(http()
+                .client(duckService)
+                .send()
+                .get("/api/duck/action/properties")
+                .queryParam("id", id));
+    }
 }

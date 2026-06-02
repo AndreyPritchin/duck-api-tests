@@ -21,7 +21,7 @@ public class DuckCreateTest extends TestNGCitrusSpringSupport {
     @Autowired
     private DuckValidationClient duckValidationClient;
 
-    @Test(description = "Проверка создания уточки с материалом rubber")
+    @Test(description = "Проверка создания утки с материалом rubber")
     @CitrusTest
     public void testCreateRubberDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
@@ -39,7 +39,7 @@ public class DuckCreateTest extends TestNGCitrusSpringSupport {
                 "}");
     }
 
-    @Test(description = "Проверка создания уточки с материалом wood")
+    @Test(description = "Проверка создания утки с материалом wood")
     @CitrusTest
     public void testCreateWoodDuck(@Optional @CitrusResource TestCaseRunner runner) {
 

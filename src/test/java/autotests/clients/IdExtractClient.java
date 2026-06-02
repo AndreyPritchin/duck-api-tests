@@ -12,13 +12,12 @@ import static com.consol.citrus.dsl.MessageSupport.MessageBodySupport.fromBody;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 @Component
-//@ContextConfiguration(classes = {EndpointConfig.class})
 public class IdExtractClient extends TestNGCitrusSpringSupport {
 
     @Autowired
     protected HttpClient duckService;
 
-    //Метод извлечения id утки в переменную duckId
+    //Метод извлечения id утки и запись его в переменную duckId
     public String idExtract(TestCaseRunner runner) {
              runner.$(http()
                 .client(duckService)
