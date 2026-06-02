@@ -54,5 +54,14 @@ public class DuckControllerClient extends TestNGCitrusSpringSupport {
                 .queryParam("sound", sound)
                 .queryParam("wingsState", wingsState));
     }
+
+    //Метод для показа характеристик утки
+    public void getPropertiesDuck(TestCaseRunner runner, String id) {
+        runner.$(http()
+                .client(duckService)
+                .send()
+                .get("/api/duck/action/properties")
+                .queryParam("id", id));
+    }
 }
 

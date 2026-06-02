@@ -7,17 +7,12 @@ import autotests.clients.IdExtractClient;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
-import com.consol.citrus.message.MessageType;
 import com.consol.citrus.testng.spring.TestNGCitrusSpringSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-
-import static com.consol.citrus.dsl.MessageSupport.MessageBodySupport.fromBody;
-import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 @ContextConfiguration(classes = {EndpointConfig.class, DuckControllerClient.class, DuckValidationClient.class, IdExtractClient.class})
 public class DuckUpdateTest extends TestNGCitrusSpringSupport {
@@ -43,8 +38,7 @@ public class DuckUpdateTest extends TestNGCitrusSpringSupport {
 
         //Валидация ответа
         duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
-                "  \"message\": \"\"Duck with id = 1 is \n" +
-                "updated\"\n" +
+                "  \"message\": \"Duck with id = ${duckId} is updated\"\n" +
                 "}");
     }
 
@@ -61,6 +55,8 @@ public class DuckUpdateTest extends TestNGCitrusSpringSupport {
         duckControllerClient.updateDuck(runner, "${duckId}", "green", 5, "wood", "KuKu", "ACTIVE");
 
         //Валидация ответа
-        duckValidationClient.validationStatus(runner, HttpStatus.OK);
+        duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"message\": \"Duck with id = ${duckId} is updated\"\n" +
+                "}");
     }
 }
