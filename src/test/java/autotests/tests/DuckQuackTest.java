@@ -35,8 +35,9 @@ public class DuckQuackTest extends TestNGCitrusSpringSupport {
         duckActionsClient.getQuackDuck(runner, "2", 2, 3);
 
         //Вызов метода валидации
-        duckValidationClient.validationJson(runner, HttpStatus.OK, "moo-moo, moo-moo, moo-moo"); //Утка в БД с sound: "quack", но фактический результат sound: "moo". В тесте используется проверка на фактическое сообщение
-
+        duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"sound\": \"" + "moo-moo, moo-moo, moo-moo" + "\",\n" +
+                "}"); //Утка в БД с sound: "quack", но фактический результат sound: "moo". В тесте используется проверка на фактическое сообщение
     }
 
     @Test(description = "Проверка кряканья утки с нечетным id")
@@ -47,6 +48,8 @@ public class DuckQuackTest extends TestNGCitrusSpringSupport {
         duckActionsClient.getQuackDuck(runner, "1", 2, 3);
 
         //Вызов метода валидации кряканья утки
-        duckValidationClient.validationJson(runner, HttpStatus.OK, "quack-quack, quack-quack, quack-quack");
+        duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"sound\": \"" + "quack-quack, quack-quack, quack-quack" + "\",\n" +
+                "}");
     }
 }
