@@ -18,7 +18,7 @@ public class IdExtractClient extends TestNGCitrusSpringSupport {
     @Autowired
     protected HttpClient duckService;
 
-        //Метод извлечения id утки в переменную duckId
+    //Метод извлечения id утки в переменную duckId
     public String idExtract(TestCaseRunner runner) {
              runner.$(http()
                 .client(duckService)

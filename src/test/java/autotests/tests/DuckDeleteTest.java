@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 @ContextConfiguration(classes = {EndpointConfig.class, DuckControllerClient.class, DuckValidationClient.class, IdExtractClient.class})
 public class DuckDeleteTest extends TestNGCitrusSpringSupport {
@@ -36,6 +35,8 @@ public class DuckDeleteTest extends TestNGCitrusSpringSupport {
 
         duckControllerClient.deleteDuck(runner, "${duckId}");
 
-        duckValidationClient.validationStatus(runner, HttpStatus.OK);
+        duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"message\": \"Duck is deleted\"\n" +
+                "}");
     }
 }

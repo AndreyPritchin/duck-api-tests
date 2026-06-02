@@ -14,6 +14,7 @@ public class DuckControllerClient extends TestNGCitrusSpringSupport {
     @Autowired
     protected HttpClient duckService;
 
+    //Метод для создания утки
     public void createDuck(TestCaseRunner runner, String color, double height, String material, String sound, String wingsState) {
         runner.$(http()
                 .client(duckService)
@@ -31,7 +32,7 @@ public class DuckControllerClient extends TestNGCitrusSpringSupport {
 
     }
 
-    //Создание метода для удаления утки
+    //Метод для удаления утки
     public void deleteDuck(TestCaseRunner runner, String id) {
         runner.$(http()
                 .client(duckService)
@@ -39,4 +40,19 @@ public class DuckControllerClient extends TestNGCitrusSpringSupport {
                 .delete("/api/duck/delete")
                 .queryParam("id", id));
     }
+
+    //Метод для обновления утки
+    public void updateDuck(TestCaseRunner runner, String id, String color, double height, String material, String sound, String wingsState) {
+        runner.$(http()
+                .client(duckService)
+                .send()
+                .put("/api/duck/update")
+                .queryParam("id", id)
+                .queryParam("color", color)
+                .queryParam("height", String.valueOf(height))
+                .queryParam("material", material)
+                .queryParam("sound", sound)
+                .queryParam("wingsState", wingsState));
+    }
 }
+
