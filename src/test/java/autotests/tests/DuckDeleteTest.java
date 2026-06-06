@@ -1,42 +1,40 @@
 package autotests.tests;
 
 import autotests.EndpointConfig;
-import autotests.clients.DuckControllerClient;
-import autotests.clients.DuckValidationClient;
-import autotests.clients.IdExtractClient;
+import autotests.clients.*;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
-import com.consol.citrus.testng.spring.TestNGCitrusSpringSupport;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
+import payloads.DuckCreatePayload;
 
-@ContextConfiguration(classes = {EndpointConfig.class, DuckControllerClient.class, DuckValidationClient.class, IdExtractClient.class})
-public class DuckDeleteTest extends TestNGCitrusSpringSupport {
-
-    @Autowired
-    private DuckControllerClient duckControllerClient;
-    @Autowired
-    private DuckValidationClient duckValidationClient;
-    @Autowired
-    private IdExtractClient idExtractClient;
+@ContextConfiguration(classes = {EndpointConfig.class, DuckClient.class})
+public class DuckDeleteTest extends DuckDeleteClient {
 
     @Test(description = "Проверка удаления утки")
     @CitrusTest
     public void testDeleteDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
-        //Вызов метода для создания утки
-        duckControllerClient.createDuck(runner, "yellow", 10.0, "rubber", "quack", "ACTIVE");
+        //Вызов метода для создания параметров утки payload
+        DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
+                .id("@ignore@")
+                .color("yellow")
+                .height(10.0)
+                .material("rubber")
+                .sound("quack")
+                .wingsState("ACTIVE");
+        //Вызов метода для создания утки payload
+        createDuckPayload(runner, duckCreatePayload);
 
-        String duckId = idExtractClient.idExtract(runner);
+        String duckId = idExtract(runner);
 
-        duckControllerClient.deleteDuck(runner, "${duckId}");
+        //Вызов метода удаления утки
+        deleteDuck(runner, "${duckId}");
 
-        duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
-                "  \"message\": \"Duck is deleted\"\n" +
-                "}");
+        //Валидация ответа resources
+        validationJsonResources(runner, HttpStatus.OK, "DeleteDuckTestResources/deleteDuck.json");
     }
 }
