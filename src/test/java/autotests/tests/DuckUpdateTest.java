@@ -10,6 +10,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import payloads.DuckCreatePayload;
+import payloads.DuckValidationMessagePayload;
+import payloads.DuckValidationParametersPayload;
 
 @ContextConfiguration(classes = {EndpointConfig.class, DuckUpdateClient.class})
 public class DuckUpdateTest extends DuckUpdateClient {
@@ -56,7 +58,11 @@ public class DuckUpdateTest extends DuckUpdateClient {
         //Вызов метода для обновления утки
         updateDuck(runner, "${duckId}", "green", 10.0, "wood", "KuKu", "ACTIVE");
 
-        //Валидация ответа resources
-        validationJsonResources(runner, HttpStatus.OK, "UpdateDuckTestResources/updateDuck.json");
+        //Вызов метода для создания параметров утки payload
+        DuckValidationMessagePayload expectedDuck = new DuckValidationMessagePayload()
+                .message("Duck with id = ${duckId} is updated");
+
+        //Валидация ответа payload
+        validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
     }
 }
