@@ -11,7 +11,6 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import payloads.DuckCreatePayload;
 import payloads.DuckValidationMessagePayload;
-import payloads.DuckValidationParametersPayload;
 
 @ContextConfiguration(classes = {EndpointConfig.class, DuckUpdateClient.class})
 public class DuckUpdateTest extends DuckUpdateClient {

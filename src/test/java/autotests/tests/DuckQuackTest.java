@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckValidationMessagePayload;
 import payloads.DuckValidationSoundPayload;
 
 @ContextConfiguration(classes = {EndpointConfig.class, DuckQuackClient.class})
