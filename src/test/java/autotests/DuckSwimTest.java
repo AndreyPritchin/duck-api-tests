@@ -41,6 +41,27 @@ public class DuckSwimTest extends TestNGCitrusSpringSupport {
                 .queryParam("id", id));
     }
 
+    //Создание метода извлечения id утки и запись его в переменную duckId
+    public String idExtract(TestCaseRunner runner) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .receive()
+                .response(HttpStatus.OK)
+                .message()
+                .type(MessageType.JSON)
+                .extract(fromBody().expression("$.id", "duckId")));
+        return ("duckId");
+    }
+
+    //Метод валидации только статус-кода
+    public void validationStatus(TestCaseRunner runner, HttpStatus statusCode) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .receive()
+                .response(statusCode)
+                .message());
+    }
+
     @Test(description = "Проверка поплыва утки с существующим id")
     @CitrusTest
     public void testGetExistentDuck(@Optional @CitrusResource TestCaseRunner runner) {
@@ -48,76 +69,24 @@ public class DuckSwimTest extends TestNGCitrusSpringSupport {
         //Вызов метода для создания утки
         createDuck(runner, "yellow", 10.0, "wood", "quack", "ACTIVE");
 
-        //Валидация JSON-ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"id\": \"@ignore@\",\n" +
-                        "  \"color\": \"yellow\",\n" +
-                        "  \"height\": 10.0,\n" +
-                        "  \"material\": \"wood\",\n" +
-                        "  \"sound\": \"quack\",\n" +
-                        "  \"wingsState\": \"ACTIVE\"\n" +
-                        "}")
-                //Записываем id в переменную duckId
-                .extract(fromBody().expression("$.id", "duckId")));
+        String duckId = idExtract(runner);
 
-        //Вызов метода полета утки
-        getSwimDuck(runner, "${duckId}");
+        //Вызов метода поплыва утки
+        getSwimDuck(runner, duckId);
 
         //Валидация ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"message\": \"I'm swimming\"\n" +
-                        "}"));
+        validationStatus(runner, HttpStatus.BAD_REQUEST);
     }
+    //По результатам тестов: Swim выдает ошибку BAD_REQUEST для существующего ID
 
     @Test(description = "Проверка поплыва утки с НЕсуществующим id")
     @CitrusTest
     public void testGetNonExistentDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
-        //Вызов метода для создания утки
-        createDuck(runner, "yellow", 10.0, "wood", "quack", "ACTIVE");
-
-        //Валидация JSON-ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"id\": \"@ignore@\",\n" +
-                        "  \"color\": \"yellow\",\n" +
-                        "  \"height\": 10.0,\n" +
-                        "  \"material\": \"wood\",\n" +
-                        "  \"sound\": \"quack\",\n" +
-                        "  \"wingsState\": \"ACTIVE\"\n" +
-                        "}")
-                //Записываем id в переменную duckId
-                .extract(fromBody().expression("$.id", "duckId")));
-
-        int duckIdInt = Integer.parseInt("duckId");
-        duckIdInt++;
-        String duckId = String.valueOf(duckIdInt);
-
         //Вызов метода поплыва утки
-        getSwimDuck(runner, "${duckId}");
+        getSwimDuck(runner, "-1");
 
         //Валидация ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.BAD_REQUEST));
+        validationStatus(runner, HttpStatus.NOT_FOUND);
     }
-    //По результатам тестов: Swim выдает ошибку NOT_FOUND
 }

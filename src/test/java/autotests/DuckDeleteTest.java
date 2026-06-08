@@ -41,6 +41,29 @@ public class DuckDeleteTest extends TestNGCitrusSpringSupport {
                 .queryParam("id", id));
     }
 
+    //Создание метода извлечения id утки и запись его в переменную duckId
+    public String idExtract(TestCaseRunner runner) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .receive()
+                .response(HttpStatus.OK)
+                .message()
+                .type(MessageType.JSON)
+                .extract(fromBody().expression("$.id", "duckId")));
+        return ("duckId");
+    }
+
+    //Создание метода валидации статус-кода и json-сообщения
+    public void validationJson(TestCaseRunner runner, HttpStatus statusCode, String jsonMessage) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .receive()
+                .response(statusCode)
+                .message()
+                .type(MessageType.JSON)
+                .body(jsonMessage));
+    }
+
     @Test(description = "Проверка удаления утки")
     @CitrusTest
     public void testDeleteDuck(@Optional @CitrusResource TestCaseRunner runner) {
@@ -48,36 +71,15 @@ public class DuckDeleteTest extends TestNGCitrusSpringSupport {
         //Вызов метода для создания утки
         createDuck(runner, "yellow", 10.0, "wood", "quack", "ACTIVE");
 
-        //Валидация JSON-ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"id\": \"@ignore@\",\n" +
-                        "  \"color\": \"yellow\",\n" +
-                        "  \"height\": 10.0,\n" +
-                        "  \"material\": \"wood\",\n" +
-                        "  \"sound\": \"quack\",\n" +
-                        "  \"wingsState\": \"ACTIVE\"\n" +
-                        "}")
-                //Записываем id в переменную duckId
-                .extract(fromBody().expression("$.id", "duckId")));
+        //Записываем id в переменную duckId
+        String duckId = idExtract(runner);
 
         //Вызов метода для удаления утки
         deleteDuck(runner, "${duckId}");
 
-        //Проверка статус-кода
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
+        //Валидация JSON-ответа
+        validationJson(runner, HttpStatus.OK, "{\n" +
                 "  \"message\": \"Duck is deleted\"\n" +
-                "}"));
+                "}");
     }
 }

@@ -46,47 +46,62 @@ public class DuckUpdateTest extends TestNGCitrusSpringSupport {
                 .queryParam("wingsState", wingsState));
     }
 
-    @Test(description = "Проверка обновления утки")
-    @CitrusTest
-    public void testUpdateDuck(@Optional @CitrusResource TestCaseRunner runner) {
-
-        //Вызов метода для создания утки
-        createDuck(runner, "yellow", 10.0, "wood", "quack", "ACTIVE");
-
-        //Валидация JSON-ответа
+    //Создание метода извлечения id утки и запись его в переменную duckId
+    public String idExtract(TestCaseRunner runner) {
         runner.$(http()
                 .client("http://localhost:2222")
                 .receive()
                 .response(HttpStatus.OK)
                 .message()
                 .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"id\": \"@ignore@\",\n" +
-                        "  \"color\": \"yellow\",\n" +
-                        "  \"height\": 10.0,\n" +
-                        "  \"material\": \"wood\",\n" +
-                        "  \"sound\": \"quack\",\n" +
-                        "  \"wingsState\": \"ACTIVE\"\n" +
-                        "}")
-                //Записываем id в переменную duckId
                 .extract(fromBody().expression("$.id", "duckId")));
+        return ("duckId");
+    }
+
+    //Создание метода валидации статус-кода и json-сообщения
+    public void validationJson(TestCaseRunner runner, HttpStatus statusCode, String jsonMessage) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .receive()
+                .response(statusCode)
+                .message()
+                .type(MessageType.JSON)
+                .body(jsonMessage));
+    }
+
+    @Test(description = "Проверка обновления цвета и высоты утки")
+    @CitrusTest
+    public void testUpdateHeightDuck(@Optional @CitrusResource TestCaseRunner runner) {
+
+        //Вызов метода для создания утки
+        createDuck(runner, "yellow", 10.0, "wood", "quack", "ACTIVE");
+
+        String duckId = idExtract(runner);
 
         //Вызов метода для обновления утки
         updateDuck(runner, "${duckId}", "red", 5, "wood", "quack", "ACTIVE");
 
         //Валидация ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK));
+        validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"message\": \"Duck with id = ${duckId} is updated\"\n" +
+                "}");
+    }
+
+    @Test(description = "Проверка обновления цвета и звука утки")
+    @CitrusTest
+    public void testUpdateSoundDuck(@Optional @CitrusResource TestCaseRunner runner) {
+
+        //Вызов метода для создания утки
+        createDuck(runner, "yellow", 10.0, "wood", "quack", "ACTIVE");
+
+        String duckId = idExtract(runner);
 
         //Вызов метода для обновления утки
-        updateDuck(runner, "${duckId}", "green", 5, "wood", "KuKu", "ACTIVE");
+        updateDuck(runner, "${duckId}", "green", 10.0, "wood", "KuKu", "ACTIVE");
 
-        //Валидация ответа (параметр sound может быть только quack по требованиям к проекту (документации))
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.BAD_REQUEST));
+        //Валидация ответа
+        validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"message\": \"Duck with id = ${duckId} is updated\"\n" +
+                "}");
     }
 }

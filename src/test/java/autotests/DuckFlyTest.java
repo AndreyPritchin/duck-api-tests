@@ -41,14 +41,8 @@ public class DuckFlyTest extends TestNGCitrusSpringSupport {
                 .queryParam("id", id));
     }
 
-    @Test(description = "Проверка характеристик утки с активным состоянием крыльев")
-    @CitrusTest
-    public void testGetFlyActiveDuck(@Optional @CitrusResource TestCaseRunner runner) {
-
-        //Вызов метода для создания утки
-        createDuck(runner, "yellow", 10.0, "wood", "quack", "ACTIVE");
-
-        //Извлечение id утки в переменную duckId
+    //Создание метода извлечения id утки и запись его в переменную duckId
+    public String idExtract(TestCaseRunner runner) {
         runner.$(http()
                 .client("http://localhost:2222")
                 .receive()
@@ -56,20 +50,36 @@ public class DuckFlyTest extends TestNGCitrusSpringSupport {
                 .message()
                 .type(MessageType.JSON)
                 .extract(fromBody().expression("$.id", "duckId")));
+        return ("duckId");
+    }
+
+    //Создание метода валидации статус-кода и json-сообщения
+    public void validationJson(TestCaseRunner runner, HttpStatus statusCode, String jsonMessage) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .receive()
+                .response(statusCode)
+                .message()
+                .type(MessageType.JSON)
+                .body(jsonMessage));
+    }
+
+    @Test(description = "Проверка характеристик утки с активным состоянием крыльев")
+    @CitrusTest
+    public void testGetFlyActiveDuck(@Optional @CitrusResource TestCaseRunner runner) {
+
+        //Вызов метода для создания утки
+        createDuck(runner, "yellow", 10.0, "wood", "quack", "ACTIVE");
+
+        String duckId = idExtract(runner);
 
         //Вызов метода полета утки
         getFlyDuck(runner, "${duckId}");
 
         //Валидация ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"message\": \"I am flying :)\"\n" + //В требованиях написано - Body: { “message”: “I’m flying”}, но фактический результат - I am flying :). В тесте используется проверка на фактическое сообщение
-                        "}"));
+        validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"message\": \"I am flying :)\"\n" + //В требованиях написано - Body: { “message”: “I’m flying”}, но фактический результат - I am flying :). В тесте используется проверка на фактическое сообщение
+                "}");
     }
 
     @Test(description = "Проверка характеристик утки со связанными крыльями")
@@ -79,58 +89,32 @@ public class DuckFlyTest extends TestNGCitrusSpringSupport {
         //Вызов метода для создания утки
         createDuck(runner, "yellow", 10.0, "wood", "quack", "FIXED");
 
-        //Извлечение id утки в переменную duckId
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .extract(fromBody().expression("$.id", "duckId")));
+        String duckId = idExtract(runner);
 
         //Вызов метода полета утки
         getFlyDuck(runner, "${duckId}");
 
         //Валидация ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"message\": \"I can not fly :C\"\n" + //В требованиях написано - Body: { “message”: “I can’t fly”}, но фактический результат - I can not fly :C. В тесте используется проверка на фактическое сообщение
-                        "}"));
+        validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"message\": \"I can not fly :C\"\n" + //В требованиях написано - Body: { “message”: “I can’t fly”}, но фактический результат - I can not fly :C. В тесте используется проверка на фактическое сообщение
+                "}");
     }
 
-    @Test(description = "Проверка характеристик утки со неопределенным состоянием крыльев")
+    @Test(description = "Проверка характеристик утки с неопределенным состоянием крыльев")
     @CitrusTest
     public void testGetFlyUndefinedDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
         //Вызов метода для создания утки
         createDuck(runner, "yellow", 10.0, "wood", "quack", "UNDEFINED");
 
-        //Извлечение id утки в переменную duckId
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .extract(fromBody().expression("$.id", "duckId")));
+        String duckId = idExtract(runner);
 
         //Вызов метода полета утки
         getFlyDuck(runner, "${duckId}");
 
         //Валидация ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"message\": \"Wings are not detected :(\"\n" + //В требованиях сообщение для UNDEFINED не описано. Фактический результат - Wings are not detected :( . В тесте используется проверка на фактическое сообщение
-                        "}"));
+        validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"message\": \"Wings are not detected :(\"\n" + //Фактический результат - Wings are not detected :(. В тесте используется проверка на фактическое сообщение
+                "}");
     }
 }

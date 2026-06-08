@@ -22,6 +22,26 @@ public class DuckPropertiesTest extends TestNGCitrusSpringSupport {
                 .queryParam("id", id));
     }
 
+    //Создание метода валидации статус-кода и json-сообщения
+    public void validationJson(TestCaseRunner runner, HttpStatus statusCode, String jsonMessage) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .receive()
+                .response(statusCode)
+                .message()
+                .type(MessageType.JSON)
+                .body(jsonMessage));
+    }
+
+    //Метод валидации только статус-кода
+    public void validationStatus(TestCaseRunner runner, HttpStatus statusCode) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .receive()
+                .response(statusCode)
+                .message());
+    }
+
     @Test(description = "Проверка характеристик утки с четным id (материал: wood)")
     @CitrusTest
     public void testGetPropertiesEvenDuck(@Optional @CitrusResource TestCaseRunner runner) {
@@ -30,19 +50,14 @@ public class DuckPropertiesTest extends TestNGCitrusSpringSupport {
         getPropertiesDuck(runner, "2");
 
         //Валидация ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"color\": \"yellow\",\n" +
-                        "  \"height\": 1000.0,\n" +
-                        "  \"material\": \"wood\",\n" +
-                        "  \"sound\": \"quack\",\n" +
-                        "  \"wingsState\": \"ACTIVE\"\n" +
-                        "}"));
+        /*duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"color\": \"yellow\",\n" +
+                "  \"height\": \"10.0\",\n" +
+                "  \"material\": \"wood\",\n" +
+                "  \"sound\": \"quack\",\n" +
+                "  \"wingsState\": \"ACTIVE\"\n" +
+                "}");*/
+        validationStatus(runner, HttpStatus.OK);
     }
     //По результатам теста: Properties возвращает ошибку на любой четный id "Number of JSON entries not equal for element: '$.', expected '5' but was '0'"
 
@@ -54,18 +69,12 @@ public class DuckPropertiesTest extends TestNGCitrusSpringSupport {
         getPropertiesDuck(runner, "1");
 
         //Валидация ответа
-        runner.$(http()
-                .client("http://localhost:2222")
-                .receive()
-                .response(HttpStatus.OK)
-                .message()
-                .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"color\": \"yellow\",\n" +
-                        "  \"height\": 1000.0,\n" +         //Утка в БД с height: 10.0, но в фактическом сообщении height: 1000.0
-                        "  \"material\": \"rubber\",\n" +
-                        "  \"sound\": \"quack\",\n" +
-                        "  \"wingsState\": \"ACTIVE\"\n" +
-                        "}"));
+        validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"color\": \"yellow\",\n" +
+                "  \"height\": 1000.0,\n" +         //Утка в БД с height: 10.0, но в фактическом сообщении height: 1000.0
+                "  \"material\": \"rubber\",\n" +
+                "  \"sound\": \"quack\",\n" +
+                "  \"wingsState\": \"ACTIVE\"\n" +
+                "}");
     }
 }

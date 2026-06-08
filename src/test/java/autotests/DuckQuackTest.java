@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
+import static com.consol.citrus.dsl.MessageSupport.MessageBodySupport.fromBody;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 public class DuckQuackTest extends TestNGCitrusSpringSupport {
@@ -24,39 +25,41 @@ public class DuckQuackTest extends TestNGCitrusSpringSupport {
                 .queryParam("soundCount", String.valueOf(soundCount)));
     }
 
-    //Создание метода валидации кряканья утки
-    public void validationQuack(TestCaseRunner runner, String sound) {
+    //Создание метода валидации статус-кода и json-сообщения
+    public void validationJson(TestCaseRunner runner, HttpStatus statusCode, String jsonMessage) {
         runner.$(http()
                 .client("http://localhost:2222")
                 .receive()
-                .response(HttpStatus.OK)
+                .response(statusCode)
                 .message()
                 .type(MessageType.JSON)
-                .body("{\n" +
-                        "  \"sound\": \"" + sound + "\",\n" +
-                        "}"));
+                .body(jsonMessage));
     }
-
 
     @Test(description = "Проверка кряканья утки с четным id")
     @CitrusTest
     public void testGetQuackEvenDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
-        //Вызов метода характеристик утки
+        //Вызов метода кряканья утки
         getQuackDuck(runner, "2", 2, 3);
 
-        //Вызов метода валидации кряканья утки
-        validationQuack(runner, "moo-moo, moo-moo, moo-moo"); //Утка в БД с sound: "quack", но фактический результат sound: "moo". В тесте используется проверка на фактическое сообщение
+        //Вызов метода валидации
+        validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"sound\": \"" + "moo-moo, moo-moo, moo-moo" + "\",\n" +
+                "}");
+        //Утка в БД с sound: "quack", но фактический результат sound: "moo". В тесте используется проверка на фактическое сообщение
     }
 
     @Test(description = "Проверка кряканья утки с нечетным id")
     @CitrusTest
     public void testGetQuackOddDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
-        //Вызов метода характеристик утки
+        //Вызов метода кряканья утки
         getQuackDuck(runner, "1", 2, 3);
 
-        //Вызов метода валидации кряканья утки
-        validationQuack(runner, "quack-quack, quack-quack, quack-quack");
+        //Вызов метода валидации
+        validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"sound\": \"" + "quack-quack, quack-quack, quack-quack" + "\",\n" +
+                "}");
     }
 }
