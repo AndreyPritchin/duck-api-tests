@@ -1,18 +1,15 @@
 package autotests.tests;
 
-import autotests.EndpointConfig;
 import autotests.clients.*;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import payloads.DuckCreatePayload;
 import payloads.DuckValidationMessagePayload;
 
-@ContextConfiguration(classes = {EndpointConfig.class, DuckFlyClient.class})
 public class DuckFlyTest extends DuckFlyClient {
 
     @Test(description = "Проверка характеристик утки с активным состоянием крыльев")

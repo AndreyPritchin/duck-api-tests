@@ -8,7 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 @ContextConfiguration(classes = {EndpointConfig.class})
-
 public class DuckDeleteClient extends DuckClient{
 
     @Autowired

@@ -1,17 +1,14 @@
 package autotests.tests;
 
-import autotests.EndpointConfig;
 import autotests.clients.DuckPropertiesClient;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import payloads.DuckValidationParametersPayload;
 
-@ContextConfiguration(classes = {EndpointConfig.class, DuckPropertiesClient.class})
 public class DuckPropertiesTest extends DuckPropertiesClient {
 
     @Test(description = "Проверка характеристик утки с четным id (материал: wood)")

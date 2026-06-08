@@ -1,18 +1,15 @@
 package autotests.tests;
 
-import autotests.EndpointConfig;
 import autotests.clients.DuckClient;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import payloads.DuckCreatePayload;
 import payloads.DuckValidationParametersPayload;
 
-@ContextConfiguration(classes = {EndpointConfig.class, DuckClient.class})
 public class DuckCreateTest extends DuckClient {
 
     @Test(description = "Проверка создания утки с материалом rubber. Валидация string")
