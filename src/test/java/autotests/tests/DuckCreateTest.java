@@ -1,35 +1,28 @@
 package autotests.tests;
 
 import autotests.EndpointConfig;
-import autotests.clients.DuckControllerClient;
-import autotests.clients.DuckValidationClient;
+import autotests.clients.DuckCreateClient;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
-import com.consol.citrus.testng.spring.TestNGCitrusSpringSupport;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
-@ContextConfiguration(classes = {EndpointConfig.class, DuckControllerClient.class, DuckValidationClient.class})
-public class DuckCreateTest extends TestNGCitrusSpringSupport {
+@ContextConfiguration(classes = {EndpointConfig.class, DuckCreateClient.class})
 
-    @Autowired
-    private DuckControllerClient duckControllerClient;
-    @Autowired
-    private DuckValidationClient duckValidationClient;
+public class DuckCreateTest extends DuckCreateClient {
 
     @Test(description = "Проверка создания утки с материалом rubber")
     @CitrusTest
     public void testCreateRubberDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
         //Вызов метода для создания утки
-        duckControllerClient.createDuck(runner, "yellow", 10.0, "rubber", "quack", "ACTIVE");
+        createDuck(runner, "yellow", 10.0, "rubber", "quack", "ACTIVE");
 
         //Валидация ответа
-        duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
+        validationJson(runner, HttpStatus.OK, "{\n" +
                 "  \"id\": \"@ignore@\",\n" +
                 "  \"color\": \"yellow\",\n" +
                 "  \"height\": 10.0,\n" +
@@ -44,10 +37,10 @@ public class DuckCreateTest extends TestNGCitrusSpringSupport {
     public void testCreateWoodDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
         //Вызов метода для создания утки
-        duckControllerClient.createDuck(runner, "yellow", 10.0, "wood", "quack", "ACTIVE");
+        createDuck(runner, "yellow", 10.0, "wood", "quack", "ACTIVE");
 
         //Валидация ответа
-        duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
+        validationJson(runner, HttpStatus.OK, "{\n" +
                 "  \"id\": \"@ignore@\",\n" +
                 "  \"color\": \"yellow\",\n" +
                 "  \"height\": 10.0,\n" +

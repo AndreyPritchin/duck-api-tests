@@ -5,15 +5,22 @@ import com.consol.citrus.message.MessageType;
 import com.consol.citrus.testng.spring.TestNGCitrusSpringSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import com.consol.citrus.http.client.HttpClient;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-@Component
-public class DuckValidationClient extends TestNGCitrusSpringSupport {
+public class DuckPropertiesClient extends TestNGCitrusSpringSupport {
 
     @Autowired
     protected HttpClient duckService;
+
+    //Метод для показа характеристик утки
+    public void getPropertiesDuck(TestCaseRunner runner, String id) {
+        runner.$(http()
+                .client(duckService)
+                .send()
+                .get("/api/duck/action/properties")
+                .queryParam("id", id));
+    }
 
     //Метод валидации статус-кода и json-сообщения
     public void validationJson(TestCaseRunner runner, HttpStatus statusCode, String jsonMessage) {
