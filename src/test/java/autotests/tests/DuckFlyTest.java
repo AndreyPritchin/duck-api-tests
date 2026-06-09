@@ -7,8 +7,9 @@ import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckCreatePayload;
 import payloads.DuckValidationMessagePayload;
+
+import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
 public class DuckFlyTest extends DuckFlyClient {
 
@@ -16,18 +17,16 @@ public class DuckFlyTest extends DuckFlyClient {
     @CitrusTest
     public void testGetFlyActiveDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
-        //Вызов метода для создания параметров утки payload
-        DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
-                .color("yellow")
-                .height(10.0)
-                .material("rubber")
-                .sound("quack")
-                .wingsState("ACTIVE");
-        //Вызов метода для создания утки payload
-        createDuckPayload(runner, duckCreatePayload);
+        runner.variable("duckId", "1");
 
-        String duckId = idExtract(runner);
+        //Удаление тестовой утки из БД
+        runner.$(doFinally().actions(context ->
+                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+
+        //Создание утки через БД
+        dataBaseUpdate(runner,
+                "insert into duck (id, color, height, material, sound, wings_state)\n"+
+                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
 
         //Вызов метода полета утки
         getFlyDuck(runner, "${duckId}");
@@ -38,24 +37,25 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
+
+        //Валидация через БД
+        validationDatabase(runner, "${duckId}", "yellow", "10.0", "wood", "quack", "ACTIVE");
     }
 
     @Test(description = "Проверка характеристик утки со связанными крыльями")
     @CitrusTest
     public void testGetFlyFixedDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
-        //Вызов метода для создания параметров утки payload
-        DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
-                .color("yellow")
-                .height(10.0)
-                .material("rubber")
-                .sound("quack")
-                .wingsState("FIXED");
-        //Вызов метода для создания утки payload
-        createDuckPayload(runner, duckCreatePayload);
+        runner.variable("duckId", "1");
 
-        String duckId = idExtract(runner);
+        //Удаление тестовой утки из БД
+        runner.$(doFinally().actions(context ->
+                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+
+        //Создание утки через БД
+        dataBaseUpdate(runner,
+                "insert into duck (id, color, height, material, sound, wings_state)\n"+
+                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'FIXED');");
 
         //Вызов метода полета утки
         getFlyDuck(runner, "${duckId}");
@@ -66,24 +66,25 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
+
+        //Валидация через БД
+        validationDatabase(runner, "${duckId}", "yellow", "10.0", "wood", "quack", "FIXED");
     }
 
     @Test(description = "Проверка характеристик утки с неопределенным состоянием крыльев")
     @CitrusTest
     public void testGetFlyUndefinedDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
-        //Вызов метода для создания параметров утки payload
-        DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
-                .color("yellow")
-                .height(10.0)
-                .material("rubber")
-                .sound("quack")
-                .wingsState("UNDEFINED");
-        //Вызов метода для создания утки payload
-        createDuckPayload(runner, duckCreatePayload);
+        runner.variable("duckId", "1");
 
-        String duckId = idExtract(runner);
+        //Удаление тестовой утки из БД
+        runner.$(doFinally().actions(context ->
+                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+
+        //Создание утки через БД
+        dataBaseUpdate(runner,
+                "insert into duck (id, color, height, material, sound, wings_state)\n"+
+                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'UNDEFINED');");
 
         //Вызов метода полета утки
         getFlyDuck(runner, "${duckId}");
@@ -94,5 +95,8 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
+
+        //Валидация через БД
+        validationDatabase(runner, "${duckId}", "yellow", "10.0", "wood", "quack", "UNDEFINED");
     }
 }

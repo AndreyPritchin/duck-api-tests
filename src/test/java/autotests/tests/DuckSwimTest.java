@@ -7,7 +7,8 @@ import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckCreatePayload;
+
+import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
 public class DuckSwimTest extends DuckSwimClient {
 
@@ -15,21 +16,19 @@ public class DuckSwimTest extends DuckSwimClient {
     @CitrusTest
     public void testGetExistentDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
-        //Вызов метода для создания параметров утки payload
-        DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
-                .color("yellow")
-                .height(10.0)
-                .material("rubber")
-                .sound("quack")
-                .wingsState("ACTIVE");
-        //Вызов метода для создания утки payload
-        createDuckPayload(runner, duckCreatePayload);
+        runner.variable("duckId", "1");
 
-        String duckId = idExtract(runner);
+        //Удаление тестовой утки из БД
+        runner.$(doFinally().actions(context ->
+                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+
+        //Создание утки через БД
+        dataBaseUpdate(runner,
+                "insert into duck (id, color, height, material, sound, wings_state)\n"+
+                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
 
         //Вызов метода поплыва утки
-        getSwimDuck(runner, duckId);
+        getSwimDuck(runner, "duckId");
 
         //Валидация ответа
         validationStatus(runner, HttpStatus.BAD_REQUEST);
@@ -39,17 +38,6 @@ public class DuckSwimTest extends DuckSwimClient {
     @Test(description = "Проверка поплыва утки с НЕсуществующим id")
     @CitrusTest
     public void testGetNonExistentDuck(@Optional @CitrusResource TestCaseRunner runner) {
-
-        //Вызов метода для создания параметров утки payload
-        DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
-                .color("yellow")
-                .height(10.0)
-                .material("rubber")
-                .sound("quack")
-                .wingsState("ACTIVE");
-        //Вызов метода для создания утки payload
-        createDuckPayload(runner, duckCreatePayload);
 
         //Вызов метода поплыва утки
         getSwimDuck(runner, "-1");

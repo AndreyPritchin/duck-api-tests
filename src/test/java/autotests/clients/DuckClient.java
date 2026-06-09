@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ContextConfiguration;
 
+import static com.consol.citrus.actions.ExecuteSQLAction.Builder.sql;
+import static com.consol.citrus.actions.ExecuteSQLQueryAction.Builder.query;
 import static com.consol.citrus.dsl.MessageSupport.MessageBodySupport.fromBody;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
@@ -21,6 +24,9 @@ public class DuckClient extends TestNGCitrusSpringSupport {
 
     @Autowired
     protected HttpClient duckService;
+
+    @Autowired
+    protected SingleConnectionDataSource testDb;
 
 
     //Методы controller
@@ -101,8 +107,6 @@ public class DuckClient extends TestNGCitrusSpringSupport {
     }
 
 
-
-
     //Метод извлечения id утки и запись его в переменную duckId
     public String idExtract(TestCaseRunner runner) {
         runner.$(http()
@@ -116,4 +120,23 @@ public class DuckClient extends TestNGCitrusSpringSupport {
     }
 
 
+    //Методы БД
+
+
+    //Метод изменения через БД
+    public void dataBaseUpdate(TestCaseRunner runner, String sql) {
+        runner.$(sql(testDb)
+                .statement(sql));
+    }
+
+    //Метод валидации значений через БД
+    protected void validationDatabase(TestCaseRunner runner, String id, String color, String height, String material, String sound, String wingsState) {
+        runner.$(query(testDb)
+                .statement("select * from duck where ID = " + id)
+                .validate("COLOR", color)
+                .validate("HEIGHT", height)
+                .validate("MATERIAL", material)
+                .validate("SOUND", sound)
+                .validate("WINGS_STATE", wingsState));
+    }
 }

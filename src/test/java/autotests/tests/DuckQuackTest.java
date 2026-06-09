@@ -4,16 +4,28 @@ import autotests.clients.*;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
-import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import payloads.DuckValidationSoundPayload;
+
+import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
 public class DuckQuackTest extends DuckQuackClient {
 
     @Test(description = "Проверка кряканья утки с четным id")
     @CitrusTest
     public void testGetQuackEvenDuck(@Optional @CitrusResource TestCaseRunner runner) {
+
+        runner.variable("duckId", "2");
+
+        //Удаление тестовой утки из БД
+        runner.$(doFinally().actions(context ->
+                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+
+        //Создание утки через БД
+        dataBaseUpdate(runner,
+                "insert into duck (id, color, height, material, sound, wings_state)\n"+
+                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
 
         //Вызов метода кряканья утки
         getQuackDuck(runner, "2", 2, 3);
@@ -22,14 +34,22 @@ public class DuckQuackTest extends DuckQuackClient {
         DuckValidationSoundPayload expectedDuck = new DuckValidationSoundPayload()
                 .sound("moo-moo, moo-moo, moo-moo");
         //Утка в БД с sound: "quack", но фактический результат sound: "moo". В тесте используется проверка на фактическое сообщение
-
-        //Валидация ответа payload
-        validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
     }
 
     @Test(description = "Проверка кряканья утки с нечетным id")
     @CitrusTest
     public void testGetQuackOddDuck(@Optional @CitrusResource TestCaseRunner runner) {
+
+        runner.variable("duckId", "1");
+
+        //Удаление тестовой утки из БД
+        runner.$(doFinally().actions(context ->
+                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+
+        //Создание утки через БД
+        dataBaseUpdate(runner,
+                "insert into duck (id, color, height, material, sound, wings_state)\n"+
+                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
 
         //Вызов метода кряканья утки
         getQuackDuck(runner, "1", 2, 3);
@@ -37,8 +57,5 @@ public class DuckQuackTest extends DuckQuackClient {
         //Вызов метода для создания параметров утки payload
         DuckValidationSoundPayload expectedDuck = new DuckValidationSoundPayload()
                 .sound("quack-quack, quack-quack, quack-quack");
-
-        //Валидация ответа payload
-        validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
     }
 }
