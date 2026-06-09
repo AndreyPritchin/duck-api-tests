@@ -4,12 +4,18 @@ import autotests.clients.*;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
+@Epic("Тесты на duck-action-controller")
+@Feature("Плаванье утки")
+@Story("Эндпоинт /api/duck/action/swim")
 public class DuckSwimTest extends DuckSwimClient {
 
     @Test(description = "Проверка поплыва утки с существующим id")

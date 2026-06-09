@@ -3,6 +3,7 @@ package autotests.clients;
 import autotests.EndpointConfig;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.http.client.HttpClient;
+import io.qameta.allure.Step;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
@@ -14,6 +15,7 @@ public class DuckDeleteClient extends DuckClient{
     protected HttpClient duckService;
 
     //Метод для удаления утки
+    @Step("Метод для удаления утки")
     public void deleteDuck(TestCaseRunner runner, String id) {
         runner.$(http()
                 .client(duckService)

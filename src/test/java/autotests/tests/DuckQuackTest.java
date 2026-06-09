@@ -4,12 +4,18 @@ import autotests.clients.*;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import payloads.DuckValidationSoundPayload;
 
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
+@Epic("Тесты на duck-action-controller")
+@Feature("Кряканье утки")
+@Story("Эндпоинт /api/duck/action/quack")
 public class DuckQuackTest extends DuckQuackClient {
 
     @Test(description = "Проверка кряканья утки с четным id")

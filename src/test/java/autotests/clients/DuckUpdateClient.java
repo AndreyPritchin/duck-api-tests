@@ -3,6 +3,7 @@ package autotests.clients;
 import autotests.EndpointConfig;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.http.client.HttpClient;
+import io.qameta.allure.Step;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
@@ -14,6 +15,7 @@ public class DuckUpdateClient extends DuckClient {
     protected HttpClient duckService;
 
     //Метод для обновления утки
+    @Step("Метод для обновления утки")
     public void updateDuck(TestCaseRunner runner, String id, String color, double height, String material, String sound, String wingsState) {
         runner.$(http()
                 .client(duckService)

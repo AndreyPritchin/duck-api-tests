@@ -3,6 +3,7 @@ package autotests.clients;
 import autotests.EndpointConfig;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.http.client.HttpClient;
+import io.qameta.allure.Step;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
@@ -14,6 +15,7 @@ public class DuckQuackClient extends DuckClient{
     protected HttpClient duckService;
 
     //Метод кряканья утки
+    @Step("Метод кряканья утки")
     public void getQuackDuck(TestCaseRunner runner, String id, int repetitionCount, int soundCount) {
         runner.$(http()
                 .client(duckService)
