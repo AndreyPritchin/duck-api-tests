@@ -14,6 +14,7 @@ public class DuckSwimClient extends DuckClient{
     @Autowired
     protected HttpClient duckService;
 
+    /*
     //Метод поплыва утки
     @Step("Метод поплыва утки")
     public void getSwimDuck(TestCaseRunner runner, String id) {
@@ -22,5 +23,12 @@ public class DuckSwimClient extends DuckClient{
                 .send()
                 .get("/api/duck/action/swim")
                 .queryParam("id", id));
+    }
+    */
+
+    //Метод поплыва утки
+    @Step("Метод поплыва утки")
+    public void getSwimDuck(TestCaseRunner runner, String id) {
+        getMethod(runner, duckService, "/api/duck/action/swim", "id", id);
     }
 }

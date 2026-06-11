@@ -14,6 +14,7 @@ public class DuckFlyClient extends DuckClient{
     @Autowired
     protected HttpClient duckService;
 
+    /*
     //Метод полета утки
     @Step("Метод полета утки")
     public void getFlyDuck(TestCaseRunner runner, String id) {
@@ -22,5 +23,12 @@ public class DuckFlyClient extends DuckClient{
                 .send()
                 .get("/api/duck/action/fly")
                 .queryParam("id", id));
+    }
+    */
+
+    //Метод полета утки
+    @Step("Метод полета утки")
+    public void getFlyDuck(TestCaseRunner runner, String id) {
+        getMethod(runner, duckService, "/api/duck/action/fly", "id", id);
     }
 }

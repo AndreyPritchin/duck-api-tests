@@ -1,5 +1,6 @@
 package autotests.clients;
 
+import autotests.BaseTest;
 import autotests.EndpointConfig;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.http.client.HttpClient;
@@ -11,7 +12,6 @@ import io.qameta.allure.Step;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -21,52 +21,12 @@ import static com.consol.citrus.dsl.MessageSupport.MessageBodySupport.fromBody;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 @ContextConfiguration(classes = {EndpointConfig.class})
-public class DuckClient extends TestNGCitrusSpringSupport {
-
-    @Autowired
-    protected HttpClient duckService;
-
-    @Autowired
-    protected SingleConnectionDataSource testDb;
-
-
-    //Методы controller
-
-
-    //Метод для создания утки string
-    @Step("Метод для создания утки string")
-    public void createDuckString(TestCaseRunner runner, String color, double height, String material, String sound, String wingsState) {
-        runner.$(http()
-                .client(duckService)
-                .send()
-                .post("/api/duck/create")
-                .message()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body("{\n" +
-                        "  \"color\": \"" + color + "\",\n" +
-                        "  \"height\": " + height + ",\n" +
-                        "  \"material\": \"" + material + "\",\n" +
-                        "  \"sound\": \"" + sound + "\",\n" +
-                        "  \"wingsState\": \"" + wingsState + "\"\n" +
-                        "}"));
-    }
-
-    //Метод для создания утки payload
-    @Step("Метод для создания утки payload")
-    public void createDuckPayload(TestCaseRunner runner, Object duckCreatePayload) {
-        runner.$(http()
-                .client(duckService)
-                .send()
-                .post("/api/duck/create")
-                .message()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new ObjectMappingPayloadBuilder(duckCreatePayload, new ObjectMapper())));
-    }
+public class DuckClient extends BaseTest {
 
 
     //Методы валидации
 
-
+    /*
     //Метод валидации статус-кода и json-сообщения string
     @Step("Метод валидации статус-кода и json-сообщения string")
     public void validationJsonString(TestCaseRunner runner, HttpStatus statusCode, String jsonMessage) {
@@ -78,6 +38,7 @@ public class DuckClient extends TestNGCitrusSpringSupport {
                 .type(MessageType.JSON)
                 .body(jsonMessage));
     }
+
 
     //Метод валидации статус-кода и json-сообщения resources
     @Step("Метод валидации статус-кода и json-сообщения resources")
@@ -113,7 +74,6 @@ public class DuckClient extends TestNGCitrusSpringSupport {
                 .message());
     }
 
-
     //Метод извлечения id утки и запись его в переменную duckId
     @Step("Метод извлечения id утки и запись его в переменную duckId")
     public String idExtract(TestCaseRunner runner) {
@@ -126,17 +86,43 @@ public class DuckClient extends TestNGCitrusSpringSupport {
                 .extract(fromBody().expression("$.id", "duckId")));
         return("duckId");
     }
+    */
+
+    //Метод валидации статус-кода и json-сообщения string
+    @Step("Метод валидации статус-кода и json-сообщения string")
+    public void validationJsonString(TestCaseRunner runner, HttpStatus statusCode, String jsonMessage) {
+        validationJsonStringBase(runner, duckService, statusCode, jsonMessage);
+    }
+
+    //Метод валидации статус-кода и json-сообщения resources
+    @Step("Метод валидации статус-кода и json-сообщения resources")
+    public void validationJsonResources(TestCaseRunner runner, HttpStatus statusCode, String expectedResources) {
+        validationJsonResourcesBase(runner, duckService, statusCode, expectedResources);
+    }
+
+    //Метод валидации статус-кода и json-сообщения payload
+    @Step("Метод валидации статус-кода и json-сообщения payload")
+    public void validationJsonPayload(TestCaseRunner runner, HttpStatus statusCode, Object expectedPayload) {
+        validationJsonPayloadBase(runner, duckService, statusCode, expectedPayload);
+    }
+
+    //Метод валидации только статус-кода
+    @Step("Метод валидации только статус-кода")
+    public void validationStatus(TestCaseRunner runner, HttpStatus statusCode) {
+        validationStatusBase(runner, duckService, statusCode);
+    }
 
 
     //Методы БД
 
-
+    /*
     //Метод изменения через БД
     @Step("Метод изменения через БД")
     public void dataBaseUpdate(TestCaseRunner runner, String sql) {
         runner.$(sql(testDb)
                 .statement(sql));
     }
+    */
 
     //Метод валидации значений через БД
     @Step("Метод валидации значений через БД")
@@ -148,5 +134,18 @@ public class DuckClient extends TestNGCitrusSpringSupport {
                 .validate("MATERIAL", material)
                 .validate("SOUND", sound)
                 .validate("WINGS_STATE", wingsState));
+    }
+
+    //Метод создания утки через БД
+    @Step("Метод создания утки через БД")
+    public void dataBaseDuckCreate(TestCaseRunner runner, String duckId, String color, String height, String material, String sound, String wingsState) {
+        dataBaseUpdate(runner, "insert into duck (id, color, height, material, sound, wings_state)\n"+
+                "values (${duckId}, '" +color+ "', " +height+ ", '" +material+ "', '" +sound+ "', '" +wingsState+ "');");
+    }
+
+    //Метод удаления утки через БД
+    @Step("Метод удаления утки через БД")
+    public void dataBaseDuckDelete(TestCaseRunner runner, String duckId) {
+        dataBaseUpdate(runner, "delete from duck where ID = ${duckId}");
     }
 }

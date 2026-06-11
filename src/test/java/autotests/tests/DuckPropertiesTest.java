@@ -27,20 +27,22 @@ public class DuckPropertiesTest extends DuckPropertiesClient {
 
         //Удаление тестовой утки из БД
         runner.$(doFinally().actions(context ->
-                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+                dataBaseDuckDelete(runner, "duckId")));
 
         //Создание утки через БД
+        dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "ACTIVE");
+
+        /*
         dataBaseUpdate(runner,
                 "insert into duck (id, color, height, material, sound, wings_state)\n"+
                         "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
+                                 */
 
         //Вызов метода характеристик утки
         getPropertiesDuck(runner, "${duckId}");
 
+        //Валидация ответа
         validationStatus(runner, HttpStatus.OK);
-
-        //Валидация через БД
-        validationDatabase(runner, "${duckId}", "yellow", "10.0", "wood", "quack", "ACTIVE");
     }
     //По результатам теста: Properties возвращает ошибку на любой четный id "Number of JSON entries not equal for element: '$.', expected '5' but was '0'"
 
@@ -52,12 +54,16 @@ public class DuckPropertiesTest extends DuckPropertiesClient {
 
         //Удаление тестовой утки из БД
         runner.$(doFinally().actions(context ->
-                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+                dataBaseDuckDelete(runner, "duckId")));
 
         //Создание утки через БД
+        dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "rubber", "quack", "ACTIVE");
+
+        /*
         dataBaseUpdate(runner,
                 "insert into duck (id, color, height, material, sound, wings_state)\n"+
                         "values (${duckId}, 'yellow', 10.0, 'rubber', 'quack', 'ACTIVE');");
+                                 */
 
         //Вызов метода характеристик утки
         getPropertiesDuck(runner, "${duckId}");

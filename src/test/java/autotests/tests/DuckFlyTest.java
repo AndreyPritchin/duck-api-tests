@@ -27,12 +27,16 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Удаление тестовой утки из БД
         runner.$(doFinally().actions(context ->
-                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+                dataBaseDuckDelete(runner, "duckId")));
 
         //Создание утки через БД
+        dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "ACTIVE");
+
+        /*
         dataBaseUpdate(runner,
                 "insert into duck (id, color, height, material, sound, wings_state)\n"+
                         "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
+                                 */
 
         //Вызов метода полета утки
         getFlyDuck(runner, "${duckId}");
@@ -40,6 +44,7 @@ public class DuckFlyTest extends DuckFlyClient {
         //Вызов метода для создания параметров утки payload
         DuckValidationMessagePayload expectedDuck = new DuckValidationMessagePayload()
                 .message("I am flying :)");
+        //'message', expected 'I am flying :)' but was 'I'm flying'
 
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
@@ -56,12 +61,15 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Удаление тестовой утки из БД
         runner.$(doFinally().actions(context ->
-                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+                dataBaseDuckDelete(runner, "duckId")));
 
         //Создание утки через БД
+        dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "FIXED");
+        /*
         dataBaseUpdate(runner,
                 "insert into duck (id, color, height, material, sound, wings_state)\n"+
                         "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'FIXED');");
+                                 */
 
         //Вызов метода полета утки
         getFlyDuck(runner, "${duckId}");
@@ -69,6 +77,7 @@ public class DuckFlyTest extends DuckFlyClient {
         //Вызов метода для создания параметров утки payload
         DuckValidationMessagePayload expectedDuck = new DuckValidationMessagePayload()
                 .message("I can not fly :C");
+        //'message', expected 'I can not fly :C' but was 'I can't fly'
 
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
@@ -85,12 +94,16 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Удаление тестовой утки из БД
         runner.$(doFinally().actions(context ->
-                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+                dataBaseDuckDelete(runner, "duckId")));
 
         //Создание утки через БД
+        dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "UNDEFINED");
+
+        /*
         dataBaseUpdate(runner,
                 "insert into duck (id, color, height, material, sound, wings_state)\n"+
                         "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'UNDEFINED');");
+                                 */
 
         //Вызов метода полета утки
         getFlyDuck(runner, "${duckId}");
@@ -98,6 +111,7 @@ public class DuckFlyTest extends DuckFlyClient {
         //Вызов метода для создания параметров утки payload
         DuckValidationMessagePayload expectedDuck = new DuckValidationMessagePayload()
                 .message("Wings are not detected :(");
+        //'message', expected 'Wings are not detected :(' but was 'Wings are not detected'
 
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);

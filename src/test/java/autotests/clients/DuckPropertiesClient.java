@@ -14,6 +14,7 @@ public class DuckPropertiesClient extends DuckClient {
     @Autowired
     protected HttpClient duckService;
 
+    /*
     //Метод для показа характеристик утки
     @Step("Метод для показа характеристик утки")
     public void getPropertiesDuck(TestCaseRunner runner, String id) {
@@ -23,4 +24,12 @@ public class DuckPropertiesClient extends DuckClient {
                 .get("/api/duck/action/properties")
                 .queryParam("id", id));
     }
+    */
+
+    //Метод для показа характеристик утки
+    @Step("Метод для показа характеристик утки")
+    public void getPropertiesDuck(TestCaseRunner runner, String id) {
+        getMethod(runner, duckService, "/api/duck/action/properties", "id", id);
+    }
+
 }

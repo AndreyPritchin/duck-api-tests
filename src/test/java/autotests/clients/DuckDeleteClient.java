@@ -14,6 +14,7 @@ public class DuckDeleteClient extends DuckClient{
     @Autowired
     protected HttpClient duckService;
 
+    /*
     //Метод для удаления утки
     @Step("Метод для удаления утки")
     public void deleteDuck(TestCaseRunner runner, String id) {
@@ -22,5 +23,12 @@ public class DuckDeleteClient extends DuckClient{
                 .send()
                 .delete("/api/duck/delete")
                 .queryParam("id", id));
+    }
+    */
+
+    //Метод для удаления утки
+    @Step("Метод для удаления утки")
+    public void deleteDuck(TestCaseRunner runner, String id) {
+        deleteMethodString(runner, duckService, "/api/duck/delete", "id", id);
     }
 }

@@ -23,9 +23,15 @@ public class DuckDeleteTest extends DuckDeleteClient {
         runner.variable("duckId", "1");
 
         //Создание утки через БД
+        dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "ACTIVE");
+
+        /*
+        //Создание утки через БД
         dataBaseUpdate(runner,
                 "insert into duck (id, color, height, material, sound, wings_state)\n"+
                         "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
+
+        */
 
         //Вызов метода удаления утки
         deleteDuck(runner, "${duckId}");

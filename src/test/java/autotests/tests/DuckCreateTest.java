@@ -1,6 +1,7 @@
 package autotests.tests;
 
 import autotests.clients.DuckClient;
+import autotests.clients.DuckCreateClient;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
@@ -18,7 +19,7 @@ import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 @Epic("Тесты на duck-controller")
 @Feature("Создание утки")
 @Story("Эндпоинт /api/duck/create")
-public class DuckCreateTest extends DuckClient {
+public class DuckCreateTest extends DuckCreateClient {
 
     @Test(description = "Проверка создания утки с материалом rubber. Валидация string")
     @CitrusTest
@@ -26,9 +27,9 @@ public class DuckCreateTest extends DuckClient {
 
         //Удаление тестовой утки из БД
         runner.$(doFinally().actions(context ->
-                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+                dataBaseDuckDelete(runner, "duckId")));
 
-        runner.variable("duckId", "1");
+        //runner.variable("duckId", "1");
 
         //Вызов метода для создания параметров утки payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
@@ -50,7 +51,7 @@ public class DuckCreateTest extends DuckClient {
                 .sound("quack")
                 .wingsState("ACTIVE");
         //Валидация ответа payload
-        validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
+        validationJsonPayloadExtract(runner, HttpStatus.OK, expectedDuck);
     }
 
     @Test(description = "Проверка создания утки с материалом wood")
@@ -59,9 +60,9 @@ public class DuckCreateTest extends DuckClient {
 
         //Удаление тестовой утки из БД
         runner.$(doFinally().actions(context ->
-                dataBaseUpdate(runner, "delete from duck where ID = ${duckId}")));
+                dataBaseDuckDelete(runner, "duckId")));
 
-        runner.variable("duckId", "1");
+        //runner.variable("duckId", "1");
 
         //Вызов метода для создания параметров утки
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
@@ -74,6 +75,6 @@ public class DuckCreateTest extends DuckClient {
         createDuckPayload(runner, duckCreatePayload);
 
         //Валидация ответа resources
-        validationJsonResources(runner, HttpStatus.OK, "CreateDuckTestResources/createWoodDuck.json");
+        validationJsonResourcesExtract(runner, HttpStatus.OK, "CreateDuckTestResources/createWoodDuck.json");
     }
 }
