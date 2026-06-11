@@ -32,17 +32,10 @@ public class DuckUpdateTest extends DuckUpdateClient {
         //Создание утки через БД
         dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "ACTIVE");
 
-        /*
-        //Создание утки через БД
-        dataBaseUpdate(runner,
-                "insert into duck (id, color, height, material, sound, wings_state)\n"+
-                "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
-                         */
-
         //Вызов метода для обновления утки
         updateDuck(runner, "${duckId}", "red", 5, "wood", "quack", "ACTIVE");
 
-        //Валидация ответа resources
+        //Валидация ответа Resources
         validationJsonResources(runner, HttpStatus.OK, "UpdateDuckTestResources/updateDuck.json");
 
         //Валидация через БД
@@ -62,21 +55,12 @@ public class DuckUpdateTest extends DuckUpdateClient {
         //Создание утки через БД
         dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "ACTIVE");
 
-        /*
-        //Создание утки через БД
-        dataBaseUpdate(runner,
-                "insert into duck (id, color, height, material, sound, wings_state)\n"+
-                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
-                                 */
-
         //Вызов метода для обновления утки
         updateDuck(runner, "${duckId}", "green", 10.0, "wood", "KuKu", "ACTIVE");
 
-        //Вызов метода для создания параметров утки payload
+        //Валидация ответа Payload
         DuckValidationMessagePayload expectedDuck = new DuckValidationMessagePayload()
                 .message("Duck with id = ${duckId} is updated");
-
-        //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
 
         //Валидация через БД

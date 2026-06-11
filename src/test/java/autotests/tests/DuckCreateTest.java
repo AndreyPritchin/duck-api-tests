@@ -1,6 +1,5 @@
 package autotests.tests;
 
-import autotests.clients.DuckClient;
 import autotests.clients.DuckCreateClient;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
@@ -29,9 +28,7 @@ public class DuckCreateTest extends DuckCreateClient {
         runner.$(doFinally().actions(context ->
                 dataBaseDuckDelete(runner, "duckId")));
 
-        //runner.variable("duckId", "1");
-
-        //Вызов метода для создания параметров утки payload
+        //Создание утки Payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
                 .id("@ignore@")
                 .color("yellow")
@@ -39,10 +36,9 @@ public class DuckCreateTest extends DuckCreateClient {
                 .material("rubber")
                 .sound("quack")
                 .wingsState("ACTIVE");
-        //Вызов метода для создания утки payload
         createDuckPayload(runner, duckCreatePayload);
 
-        //Вызов метода для создания параметров утки payload
+        //Валидация ответа Payload
         DuckValidationParametersPayload expectedDuck = new DuckValidationParametersPayload()
                 .id("@ignore@")
                 .color("yellow")
@@ -50,7 +46,6 @@ public class DuckCreateTest extends DuckCreateClient {
                 .material("rubber")
                 .sound("quack")
                 .wingsState("ACTIVE");
-        //Валидация ответа payload
         validationJsonPayloadExtract(runner, HttpStatus.OK, expectedDuck);
     }
 
@@ -62,19 +57,16 @@ public class DuckCreateTest extends DuckCreateClient {
         runner.$(doFinally().actions(context ->
                 dataBaseDuckDelete(runner, "duckId")));
 
-        //runner.variable("duckId", "1");
-
-        //Вызов метода для создания параметров утки
+        //Создание утки Payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
                 .color("yellow")
                 .height(10.0)
                 .material("wood")
                 .sound("quack")
                 .wingsState("ACTIVE");
-        //Вызов метода для создания утки payload
         createDuckPayload(runner, duckCreatePayload);
 
-        //Валидация ответа resources
+        //Валидация ответа Resources
         validationJsonResourcesExtract(runner, HttpStatus.OK, "CreateDuckTestResources/createWoodDuck.json");
     }
 }

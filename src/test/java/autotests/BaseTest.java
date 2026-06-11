@@ -15,7 +15,6 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ContextConfiguration;
 
 import static com.consol.citrus.actions.ExecuteSQLAction.Builder.sql;
-import static com.consol.citrus.dsl.MessageSupport.MessageBodySupport.fromBody;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 @ContextConfiguration(classes = {EndpointConfig.class})
@@ -35,6 +34,53 @@ public class BaseTest extends TestNGCitrusSpringSupport {
     public void dataBaseUpdate(TestCaseRunner runner, String sql) {
         runner.$(sql(testDb)
                 .statement(sql));
+    }
+
+
+    //Методы API
+
+    //Метод post String
+    @Step("Метод post String")
+    public void postMethodString(TestCaseRunner runner, HttpClient service, String apiPath, String bodyString) {
+        runner.$(http()
+                .client(service)
+                .send()
+                .post(apiPath)
+                .message()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(bodyString));
+    }
+
+    //Метод post Payload
+    @Step("Метод post Payload")
+    public void postMethodPayload(TestCaseRunner runner, HttpClient service, String apiPath, Object duckCreatePayload) {
+        runner.$(http()
+                .client(service)
+                .send()
+                .post(apiPath)
+                .message()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new ObjectMappingPayloadBuilder(duckCreatePayload, new ObjectMapper())));
+    }
+
+    //Метод delete
+    @Step("Метод delete")
+    public void deleteMethodString(TestCaseRunner runner, HttpClient service, String apiPath, String queryName, String queryValue) {
+        runner.$(http()
+                .client(service)
+                .send()
+                .delete(apiPath)
+                .queryParam(queryName, queryValue));
+    }
+
+    //Метод get
+    @Step("Метод get")
+    public void getMethod(TestCaseRunner runner, HttpClient service, String apiPath, String queryName, String queryValue) {
+        runner.$(http()
+                .client(service)
+                .send()
+                .get(apiPath)
+                .queryParam(queryName, queryValue));
     }
 
 
@@ -84,52 +130,5 @@ public class BaseTest extends TestNGCitrusSpringSupport {
                 .receive()
                 .response(statusCode)
                 .message());
-    }
-
-
-    //Методы API
-
-    //Метод post String
-    @Step("Метод post String")
-    public void postMethodString(TestCaseRunner runner, HttpClient service, String apiPath, String bodyString) {
-        runner.$(http()
-                .client(service)
-                .send()
-                .post(apiPath)
-                .message()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(bodyString));
-    }
-
-    //Метод post Payload
-    @Step("Метод post Payload")
-    public void postMethodPayload(TestCaseRunner runner, HttpClient service, String apiPath, Object duckCreatePayload) {
-        runner.$(http()
-                .client(service)
-                .send()
-                .post(apiPath)
-                .message()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new ObjectMappingPayloadBuilder(duckCreatePayload, new ObjectMapper())));
-    }
-
-    //Метод delete String
-    @Step("Метод delete String")
-    public void deleteMethodString(TestCaseRunner runner, HttpClient service, String apiPath, String queryName, String queryValue) {
-        runner.$(http()
-                .client(service)
-                .send()
-                .delete(apiPath)
-                .queryParam(queryName, queryValue));
-    }
-
-    //Метод get String
-    @Step("Метод get")
-    public void getMethod(TestCaseRunner runner, HttpClient service, String apiPath, String queryName, String queryValue) {
-        runner.$(http()
-                .client(service)
-                .send()
-                .get(apiPath)
-                .queryParam(queryName, queryValue));
     }
 }

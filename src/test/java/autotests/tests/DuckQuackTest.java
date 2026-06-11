@@ -31,16 +31,10 @@ public class DuckQuackTest extends DuckQuackClient {
         //Создание утки через БД
         dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "ACTIVE");
 
-        /*
-        dataBaseUpdate(runner,
-                "insert into duck (id, color, height, material, sound, wings_state)\n"+
-                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
-                                 */
-
         //Вызов метода кряканья утки
         getQuackDuck(runner, "2", 2, 3);
 
-        //Вызов метода для создания параметров утки payload
+        //Валидация ответа Payload
         DuckValidationSoundPayload expectedDuck = new DuckValidationSoundPayload()
                 .sound("moo-moo, moo-moo, moo-moo");
         //Утка в БД с sound: "quack", но фактический результат sound: "moo". В тесте используется проверка на фактическое сообщение
@@ -59,16 +53,10 @@ public class DuckQuackTest extends DuckQuackClient {
         //Создание утки через БД
         dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "ACTIVE");
 
-        /*
-        dataBaseUpdate(runner,
-                "insert into duck (id, color, height, material, sound, wings_state)\n"+
-                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
-                                 */
-
         //Вызов метода кряканья утки
         getQuackDuck(runner, "1", 2, 3);
 
-        //Вызов метода для создания параметров утки payload
+        //Валидация ответа Payload
         DuckValidationSoundPayload expectedDuck = new DuckValidationSoundPayload()
                 .sound("quack-quack, quack-quack, quack-quack");
     }

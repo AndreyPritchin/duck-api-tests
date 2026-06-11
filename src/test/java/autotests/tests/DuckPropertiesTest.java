@@ -32,12 +32,6 @@ public class DuckPropertiesTest extends DuckPropertiesClient {
         //Создание утки через БД
         dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "ACTIVE");
 
-        /*
-        dataBaseUpdate(runner,
-                "insert into duck (id, color, height, material, sound, wings_state)\n"+
-                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
-                                 */
-
         //Вызов метода характеристик утки
         getPropertiesDuck(runner, "${duckId}");
 
@@ -59,23 +53,16 @@ public class DuckPropertiesTest extends DuckPropertiesClient {
         //Создание утки через БД
         dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "rubber", "quack", "ACTIVE");
 
-        /*
-        dataBaseUpdate(runner,
-                "insert into duck (id, color, height, material, sound, wings_state)\n"+
-                        "values (${duckId}, 'yellow', 10.0, 'rubber', 'quack', 'ACTIVE');");
-                                 */
-
         //Вызов метода характеристик утки
         getPropertiesDuck(runner, "${duckId}");
 
-        //Вызов метода для создания параметров утки payload
+        //Валидация ответа Payload
         DuckValidationParametersPayload expectedDuck = new DuckValidationParametersPayload()
                 .color("yellow")
                 .height(1000.0)         //Утка в БД с height: 10.0, но в фактическом сообщении height: 1000.0
                 .material("rubber")
                 .sound("quack")
                 .wingsState("ACTIVE");
-        //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
 
         //Валидация через БД

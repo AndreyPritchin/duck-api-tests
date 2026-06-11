@@ -31,12 +31,6 @@ public class DuckSwimTest extends DuckSwimClient {
         //Создание утки через БД
         dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "ACTIVE");
 
-        /*
-        dataBaseUpdate(runner,
-                "insert into duck (id, color, height, material, sound, wings_state)\n"+
-                        "values (${duckId}, 'yellow', 10.0, 'wood', 'quack', 'ACTIVE');");
-                                 */
-
         //Вызов метода поплыва утки
         getSwimDuck(runner, "duckId");
 
