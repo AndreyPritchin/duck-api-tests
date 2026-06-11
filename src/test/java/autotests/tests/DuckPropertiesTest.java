@@ -93,7 +93,8 @@ public class DuckPropertiesTest extends DuckPropertiesClient {
                 .sound(sound)
                 .wingsState(wingsState);
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
-        */
+
+         */
 
         //Валидация через БД
         validationDatabase(runner, duckId, color, String.valueOf(height), material, sound, wingsState);
