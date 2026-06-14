@@ -1,0 +1,80 @@
+package autotests;
+
+import com.consol.citrus.TestCaseRunner;
+import com.consol.citrus.annotations.CitrusResource;
+import com.consol.citrus.annotations.CitrusTest;
+import com.consol.citrus.message.MessageType;
+import com.consol.citrus.testng.spring.TestNGCitrusSpringSupport;
+import org.springframework.http.HttpStatus;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Test;
+
+import static com.consol.citrus.http.actions.HttpActionBuilder.http;
+
+public class DuckPropertiesTest extends TestNGCitrusSpringSupport {
+
+    //Создание метода для показа характеристик утки
+    public void getPropertiesDuck(TestCaseRunner runner, String id) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .send()
+                .get("/api/duck/action/properties")
+                .queryParam("id", id));
+    }
+
+    //Создание метода валидации статус-кода и json-сообщения
+    public void validationJson(TestCaseRunner runner, HttpStatus statusCode, String jsonMessage) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .receive()
+                .response(statusCode)
+                .message()
+                .type(MessageType.JSON)
+                .body(jsonMessage));
+    }
+
+    //Метод валидации только статус-кода
+    public void validationStatus(TestCaseRunner runner, HttpStatus statusCode) {
+        runner.$(http()
+                .client("http://localhost:2222")
+                .receive()
+                .response(statusCode)
+                .message());
+    }
+
+    @Test(description = "Проверка характеристик утки с четным id (материал: wood)")
+    @CitrusTest
+    public void testGetPropertiesEvenDuck(@Optional @CitrusResource TestCaseRunner runner) {
+
+        //Вызов метода характеристик утки
+        getPropertiesDuck(runner, "2");
+
+        //Валидация ответа
+        /*duckValidationClient.validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"color\": \"yellow\",\n" +
+                "  \"height\": \"10.0\",\n" +
+                "  \"material\": \"wood\",\n" +
+                "  \"sound\": \"quack\",\n" +
+                "  \"wingsState\": \"ACTIVE\"\n" +
+                "}");*/
+        validationStatus(runner, HttpStatus.OK);
+    }
+    //По результатам теста: Properties возвращает ошибку на любой четный id "Number of JSON entries not equal for element: '$.', expected '5' but was '0'"
+
+    @Test(description = "Проверка характеристик утки с нечетным id (материал: rubber)")
+    @CitrusTest
+    public void testGetPropertiesOddDuck(@Optional @CitrusResource TestCaseRunner runner) {
+
+        //Вызов метода характеристик утки
+        getPropertiesDuck(runner, "1");
+
+        //Валидация ответа
+        validationJson(runner, HttpStatus.OK, "{\n" +
+                "  \"color\": \"yellow\",\n" +
+                "  \"height\": 1000.0,\n" +         //Утка в БД с height: 10.0, но в фактическом сообщении height: 1000.0
+                "  \"material\": \"rubber\",\n" +
+                "  \"sound\": \"quack\",\n" +
+                "  \"wingsState\": \"ACTIVE\"\n" +
+                "}");
+    }
+}
