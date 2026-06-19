@@ -1,6 +1,5 @@
 package autotests.clients;
 
-import autotests.EndpointConfig;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.message.MessageType;
 import com.consol.citrus.message.builder.ObjectMappingPayloadBuilder;
@@ -8,12 +7,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.Step;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ContextConfiguration;
 
 import static com.consol.citrus.dsl.MessageSupport.MessageBodySupport.fromBody;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-@ContextConfiguration(classes = {EndpointConfig.class})
 public class DuckCreateClient extends DuckClient {
 
     //Метод для создания утки String
@@ -39,7 +36,7 @@ public class DuckCreateClient extends DuckClient {
                 .type(MessageType.JSON)
                 .body(jsonMessage)
                 .extract(fromBody().expression("$.id", "duckId")));
-        return("duckId");
+        return("${duckId}");
     }
 
     //Метод валидации статус-кода и json-сообщения resources. Извлечение id
@@ -53,7 +50,7 @@ public class DuckCreateClient extends DuckClient {
                 .type(MessageType.JSON)
                 .body(new ClassPathResource(expectedResources))
                 .extract(fromBody().expression("$.id", "duckId")));
-        return("duckId");
+        return("${duckId}");
     }
 
     //Метод валидации статус-кода и json-сообщения payload. Извлечение id
@@ -67,6 +64,6 @@ public class DuckCreateClient extends DuckClient {
                 .type(MessageType.JSON)
                 .body(new ObjectMappingPayloadBuilder(expectedPayload, new ObjectMapper()))
                 .extract(fromBody().expression("$.id", "duckId")));
-        return("duckId");
+        return("${duckId}");
     }
 }

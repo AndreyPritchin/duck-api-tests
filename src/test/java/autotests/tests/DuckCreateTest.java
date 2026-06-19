@@ -1,6 +1,7 @@
 package autotests.tests;
 
 import autotests.clients.DuckCreateClient;
+import autotests.payloads.BodyPayload;
 import com.consol.citrus.TestCaseRunner;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.annotations.CitrusTest;
@@ -10,8 +11,7 @@ import io.qameta.allure.Story;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckCreatePayload;
-import payloads.DuckValidationParametersPayload;
+import autotests.payloads.DuckValidationParametersPayload;
 
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
@@ -29,8 +29,7 @@ public class DuckCreateTest extends DuckCreateClient {
                 dataBaseDuckDelete(runner, "duckId")));
 
         //Создание утки Payload
-        DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
+        BodyPayload duckCreatePayload = new BodyPayload()
                 .color("yellow")
                 .height(10.0)
                 .material("rubber")
@@ -58,7 +57,7 @@ public class DuckCreateTest extends DuckCreateClient {
                 dataBaseDuckDelete(runner, "duckId")));
 
         //Создание утки Payload
-        DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
+        BodyPayload duckCreatePayload = new BodyPayload()
                 .color("yellow")
                 .height(10.0)
                 .material("wood")

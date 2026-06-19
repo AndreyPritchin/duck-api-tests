@@ -53,14 +53,14 @@ public class BaseTest extends TestNGCitrusSpringSupport {
 
     //Метод post Payload
     @Step("Метод post Payload")
-    public void postMethodPayload(TestCaseRunner runner, HttpClient service, String apiPath, Object duckCreatePayload) {
+    public void postMethodPayload(TestCaseRunner runner, HttpClient service, String apiPath, Object bodyPayload) {
         runner.$(http()
                 .client(service)
                 .send()
                 .post(apiPath)
                 .message()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new ObjectMappingPayloadBuilder(duckCreatePayload, new ObjectMapper())));
+                .body(new ObjectMappingPayloadBuilder(bodyPayload, new ObjectMapper())));
     }
 
     //Метод delete
@@ -130,5 +130,16 @@ public class BaseTest extends TestNGCitrusSpringSupport {
                 .receive()
                 .response(statusCode)
                 .message());
+    }
+
+    //Общий метод валидации статус-кода и ПУСТОВО json-сообщения
+    public void validateJsonEmptyBase(TestCaseRunner runner, HttpClient service, HttpStatus statusCode) {
+        runner.$(http()
+                .client(service)
+                .receive()
+                .response(statusCode)
+                .message()
+                .type(MessageType.JSON)
+                .body(""));
     }
 }

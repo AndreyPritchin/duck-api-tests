@@ -1,12 +1,9 @@
 package autotests.clients;
 
-import autotests.EndpointConfig;
 import com.consol.citrus.TestCaseRunner;
 import io.qameta.allure.Step;
-import org.springframework.test.context.ContextConfiguration;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-@ContextConfiguration(classes = {EndpointConfig.class})
 public class DuckUpdateClient extends DuckClient {
 
     //Метод для обновления утки

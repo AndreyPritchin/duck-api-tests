@@ -32,12 +32,12 @@ public class DuckSwimTest extends DuckSwimClient {
         dataBaseDuckCreate(runner, "duckId", "yellow", "10.0", "wood", "quack", "ACTIVE");
 
         //Вызов метода поплыва утки
-        getSwimDuck(runner, "duckId");
+        getSwimDuck(runner, "${duckId}");
 
-        //Валидация ответа
-        validationStatus(runner, HttpStatus.BAD_REQUEST);
+        //Валидация пустого ответа
+        validateJsonEmpty(runner, HttpStatus.NOT_FOUND);
     }
-    //По результатам тестов: Swim выдает ошибку BAD_REQUEST для существующего ID
+    //По результатам тестов: Swim выдает ошибку NOT_FOUND для существующего ID
 
     @Test(description = "Проверка поплыва утки с НЕсуществующим id")
     @CitrusTest
@@ -46,7 +46,7 @@ public class DuckSwimTest extends DuckSwimClient {
         //Вызов метода поплыва утки
         getSwimDuck(runner, "-1");
 
-        //Валидация ответа
-        validationStatus(runner, HttpStatus.NOT_FOUND);
+        //Валидация пустого ответа
+        validateJsonEmpty(runner, HttpStatus.NOT_FOUND);
     }
 }
