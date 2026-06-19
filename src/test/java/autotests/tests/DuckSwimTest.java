@@ -17,7 +17,6 @@ public class DuckSwimTest extends DuckSwimClient {
 
         //Вызов метода для создания параметров утки payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                //.id("@ignore@")
                 .color("yellow")
                 .height(10.0)
                 .material("rubber")
@@ -31,8 +30,8 @@ public class DuckSwimTest extends DuckSwimClient {
         //Вызов метода поплыва утки
         getSwimDuck(runner, duckId);
 
-        //Валидация ответа
-        validationStatus(runner, HttpStatus.NOT_FOUND);
+        //Валидация пустого тела ответа
+        validateJsonEmpty(runner, HttpStatus.NOT_FOUND);
     }
     //По результатам тестов: Swim выдает ошибку NOT_FOUND для существующего ID
 
@@ -42,7 +41,6 @@ public class DuckSwimTest extends DuckSwimClient {
 
         //Вызов метода для создания параметров утки payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                //.id("@ignore@")
                 .color("yellow")
                 .height(10.0)
                 .material("rubber")

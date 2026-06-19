@@ -28,7 +28,7 @@ public class DuckPropertiesTest extends DuckPropertiesClient {
     public void testGetPropertiesOddDuck(@Optional @CitrusResource TestCaseRunner runner) {
 
         //Вызов метода характеристик утки
-        getPropertiesDuck(runner, "3");
+        getPropertiesDuck(runner, "1");
 
         //Вызов метода для создания параметров утки payload
         DuckValidationParametersPayload expectedDuck = new DuckValidationParametersPayload()
