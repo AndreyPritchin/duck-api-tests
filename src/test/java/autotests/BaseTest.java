@@ -132,7 +132,7 @@ public class BaseTest extends TestNGCitrusSpringSupport {
                 .message());
     }
 
-    //Общий метод валидации статус-кода и ПУСТОВО json-сообщения
+    //Общий метод валидации статус-кода и ПУСТОГО json-сообщения
     public void validateJsonEmptyBase(TestCaseRunner runner, HttpClient service, HttpStatus statusCode) {
         runner.$(http()
                 .client(service)

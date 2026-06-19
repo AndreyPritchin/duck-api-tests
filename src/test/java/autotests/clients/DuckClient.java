@@ -2,13 +2,10 @@ package autotests.clients;
 
 import autotests.BaseTest;
 import com.consol.citrus.TestCaseRunner;
-import com.consol.citrus.http.client.HttpClient;
-import com.consol.citrus.message.MessageType;
 import io.qameta.allure.Step;
 import org.springframework.http.HttpStatus;
 
 import static com.consol.citrus.actions.ExecuteSQLQueryAction.Builder.query;
-import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
 public class DuckClient extends BaseTest {
 
@@ -45,7 +42,7 @@ public class DuckClient extends BaseTest {
     public void validateDeletedDatabase(TestCaseRunner runner, String id) {
         runner.$(query(testDb)
                 .statement("select COUNT(1) as DUCK_COUNT from duck where ID = " + id)
-                .validate("DUCK_COUNT", "0")); // Ожидаем, что количество равно 0
+                .validate("DUCK_COUNT", "0"));
     }
 
 
@@ -75,7 +72,7 @@ public class DuckClient extends BaseTest {
         validationStatusBase(runner, duckService, statusCode);
     }
 
-    //Общий метод валидации статус-кода и ПУСТОВО json-сообщения
+    //Общий метод валидации статус-кода и ПУСТОГО json-сообщения
     public void validateJsonEmpty(TestCaseRunner runner, HttpStatus statusCode) {
         validateJsonEmptyBase(runner, duckService, statusCode);
     }
