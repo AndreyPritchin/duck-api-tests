@@ -100,17 +100,15 @@ public class DuckClient extends TestNGCitrusSpringSupport {
                 .message());
     }
 
-    //Метод валидации статус-кода и ПУСТОВО json-сообщения
-    public void validateJsonEmpty(TestCaseRunner runner, HttpStatus status) {
-        runner.$(
-                http()
-                        .client(duckService)
-                        .receive()
-                        .response(status)
-                        .message()
-                        .type(MessageType.PLAINTEXT)
-                        .body("")
-        );
+    //Метод валидации статус-кода и ПУСТОГО json-сообщения
+    public void validateJsonEmpty(TestCaseRunner runner, HttpStatus statusCode) {
+        runner.$(http()
+                .client(duckService)
+                .receive()
+                .response(statusCode)
+                .message()
+                .type(MessageType.JSON)
+                .body(""));
     }
 
 
