@@ -7,7 +7,7 @@ import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckValidationSoundPayload;
+import autotests.payloads.DuckValidationSoundPayload;
 
 public class DuckQuackTest extends DuckQuackClient {
 

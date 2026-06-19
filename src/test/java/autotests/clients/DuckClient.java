@@ -100,7 +100,18 @@ public class DuckClient extends TestNGCitrusSpringSupport {
                 .message());
     }
 
-
+    //Метод валидации статус-кода и ПУСТОВО json-сообщения
+    public void validateJsonEmpty(TestCaseRunner runner, HttpStatus status) {
+        runner.$(
+                http()
+                        .client(duckService)
+                        .receive()
+                        .response(status)
+                        .message()
+                        .type(MessageType.PLAINTEXT)
+                        .body("")
+        );
+    }
 
 
     //Метод извлечения id утки и запись его в переменную duckId
@@ -112,8 +123,6 @@ public class DuckClient extends TestNGCitrusSpringSupport {
                 .message()
                 .type(MessageType.JSON)
                 .extract(fromBody().expression("$.id", "duckId")));
-        return("duckId");
+        return("${duckId}");
     }
-
-
 }

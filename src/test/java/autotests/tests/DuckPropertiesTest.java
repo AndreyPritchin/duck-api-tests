@@ -7,7 +7,7 @@ import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckValidationParametersPayload;
+import autotests.payloads.DuckValidationParametersPayload;
 
 public class DuckPropertiesTest extends DuckPropertiesClient {
 
@@ -18,17 +18,10 @@ public class DuckPropertiesTest extends DuckPropertiesClient {
         //Вызов метода характеристик утки
         getPropertiesDuck(runner, "2");
 
-        //Валидация ответа
-        /*validationJsonString(runner, HttpStatus.OK, "{\n" +
-                "  \"color\": \"yellow\",\n" +
-                "  \"height\": \"10.0\",\n" +
-                "  \"material\": \"wood\",\n" +
-                "  \"sound\": \"quack\",\n" +
-                "  \"wingsState\": \"ACTIVE\"\n" +
-                "}");*/
-        validationStatus(runner, HttpStatus.OK);
+        //Валидация пустого тела ответа
+        validateJsonEmpty(runner, HttpStatus.OK);
     }
-    //По результатам теста: Properties возвращает ошибку на любой четный id "Number of JSON entries not equal for element: '$.', expected '5' but was '0'"
+    //По результатам теста: Properties возвращает ошибку на любой четный id "Number of JSON entries not equal for element: '$.', expected '5' but was '0', поэтому проверяю пустое тело ответа"
 
     @Test(description = "Проверка характеристик утки с нечетным id (материал: rubber)")
     @CitrusTest

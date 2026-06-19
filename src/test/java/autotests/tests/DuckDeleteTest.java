@@ -7,7 +7,7 @@ import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckCreatePayload;
+import autotests.payloads.DuckCreatePayload;
 
 public class DuckDeleteTest extends DuckDeleteClient {
 
@@ -17,7 +17,6 @@ public class DuckDeleteTest extends DuckDeleteClient {
 
         //Вызов метода для создания параметров утки payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
                 .color("yellow")
                 .height(10.0)
                 .material("rubber")
@@ -29,7 +28,7 @@ public class DuckDeleteTest extends DuckDeleteClient {
         String duckId = idExtract(runner);
 
         //Вызов метода удаления утки
-        deleteDuck(runner, "${duckId}");
+        deleteDuck(runner, duckId);
 
         //Валидация ответа resources
         validationJsonResources(runner, HttpStatus.OK, "DeleteDuckTestResources/deleteDuck.json");

@@ -1,4 +1,4 @@
-package payloads;
+package autotests.payloads;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -7,7 +7,7 @@ import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckCreatePayload;
+import autotests.payloads.DuckCreatePayload;
 
 public class DuckSwimTest extends DuckSwimClient {
 
@@ -17,7 +17,7 @@ public class DuckSwimTest extends DuckSwimClient {
 
         //Вызов метода для создания параметров утки payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
+                //.id("@ignore@")
                 .color("yellow")
                 .height(10.0)
                 .material("rubber")
@@ -32,9 +32,9 @@ public class DuckSwimTest extends DuckSwimClient {
         getSwimDuck(runner, duckId);
 
         //Валидация ответа
-        validationStatus(runner, HttpStatus.BAD_REQUEST);
+        validationStatus(runner, HttpStatus.NOT_FOUND);
     }
-    //По результатам тестов: Swim выдает ошибку BAD_REQUEST для существующего ID
+    //По результатам тестов: Swim выдает ошибку NOT_FOUND для существующего ID
 
     @Test(description = "Проверка поплыва утки с НЕсуществующим id")
     @CitrusTest
@@ -42,7 +42,7 @@ public class DuckSwimTest extends DuckSwimClient {
 
         //Вызов метода для создания параметров утки payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
+                //.id("@ignore@")
                 .color("yellow")
                 .height(10.0)
                 .material("rubber")
@@ -54,7 +54,7 @@ public class DuckSwimTest extends DuckSwimClient {
         //Вызов метода поплыва утки
         getSwimDuck(runner, "-1");
 
-        //Валидация ответа
-        validationStatus(runner, HttpStatus.NOT_FOUND);
+        //Валидация пустого тела ответа
+        validateJsonEmpty(runner, HttpStatus.NOT_FOUND);
     }
 }

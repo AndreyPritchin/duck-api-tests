@@ -7,8 +7,8 @@ import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckCreatePayload;
-import payloads.DuckValidationMessagePayload;
+import autotests.payloads.DuckCreatePayload;
+import autotests.payloads.DuckValidationMessagePayload;
 
 public class DuckUpdateTest extends DuckUpdateClient {
 
@@ -29,7 +29,7 @@ public class DuckUpdateTest extends DuckUpdateClient {
         String duckId = idExtract(runner);
 
         //Вызов метода для обновления утки
-        updateDuck(runner, "${duckId}", "red", 5, "wood", "quack", "ACTIVE");
+        updateDuck(runner, duckId, "red", 5, "wood", "quack", "ACTIVE");
 
         //Валидация ответа resources
         validationJsonResources(runner, HttpStatus.OK, "UpdateDuckTestResources/updateDuck.json");
@@ -52,11 +52,11 @@ public class DuckUpdateTest extends DuckUpdateClient {
         String duckId = idExtract(runner);
 
         //Вызов метода для обновления утки
-        updateDuck(runner, "${duckId}", "green", 10.0, "wood", "KuKu", "ACTIVE");
+        updateDuck(runner, duckId, "green", 10.0, "wood", "KuKu", "ACTIVE");
 
         //Вызов метода для создания параметров утки payload
         DuckValidationMessagePayload expectedDuck = new DuckValidationMessagePayload()
-                .message("Duck with id = ${duckId} is updated");
+                .message("Duck with id = " + duckId + " is updated");
 
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);

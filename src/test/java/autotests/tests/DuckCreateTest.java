@@ -7,8 +7,8 @@ import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckCreatePayload;
-import payloads.DuckValidationParametersPayload;
+import autotests.payloads.DuckCreatePayload;
+import autotests.payloads.DuckValidationParametersPayload;
 
 public class DuckCreateTest extends DuckClient {
 
@@ -21,7 +21,6 @@ public class DuckCreateTest extends DuckClient {
 
         //Вызов метода для создания параметров утки payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
                 .color("yellow")
                 .height(10.0)
                 .material("rubber")

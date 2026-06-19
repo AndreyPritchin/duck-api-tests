@@ -7,8 +7,8 @@ import com.consol.citrus.annotations.CitrusTest;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckCreatePayload;
-import payloads.DuckValidationMessagePayload;
+import autotests.payloads.DuckCreatePayload;
+import autotests.payloads.DuckValidationMessagePayload;
 
 public class DuckFlyTest extends DuckFlyClient {
 
@@ -18,7 +18,6 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Вызов метода для создания параметров утки payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
                 .color("yellow")
                 .height(10.0)
                 .material("rubber")
@@ -30,7 +29,7 @@ public class DuckFlyTest extends DuckFlyClient {
         String duckId = idExtract(runner);
 
         //Вызов метода полета утки
-        getFlyDuck(runner, "${duckId}");
+        getFlyDuck(runner, duckId);
 
         //Вызов метода для создания параметров утки payload
         DuckValidationMessagePayload expectedDuck = new DuckValidationMessagePayload()
@@ -46,7 +45,6 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Вызов метода для создания параметров утки payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
                 .color("yellow")
                 .height(10.0)
                 .material("rubber")
@@ -58,7 +56,7 @@ public class DuckFlyTest extends DuckFlyClient {
         String duckId = idExtract(runner);
 
         //Вызов метода полета утки
-        getFlyDuck(runner, "${duckId}");
+        getFlyDuck(runner, duckId);
 
         //Вызов метода для создания параметров утки payload
         DuckValidationMessagePayload expectedDuck = new DuckValidationMessagePayload()
@@ -74,7 +72,6 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Вызов метода для создания параметров утки payload
         DuckCreatePayload duckCreatePayload = new DuckCreatePayload()
-                .id("@ignore@")
                 .color("yellow")
                 .height(10.0)
                 .material("rubber")
@@ -86,7 +83,7 @@ public class DuckFlyTest extends DuckFlyClient {
         String duckId = idExtract(runner);
 
         //Вызов метода полета утки
-        getFlyDuck(runner, "${duckId}");
+        getFlyDuck(runner, duckId);
 
         //Вызов метода для создания параметров утки payload
         DuckValidationMessagePayload expectedDuck = new DuckValidationMessagePayload()
