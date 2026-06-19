@@ -23,6 +23,6 @@ public class DuckDeleteClient extends DuckClient{
     public void validateDeletedDatabase(TestCaseRunner runner, String id) {
         runner.$(query(testDb)
                 .statement("select COUNT(1) as DUCK_COUNT from duck where ID = " + id)
-                .validate("DUCK_COUNT", "0")); // Ожидаем, что количество равно 0
+                .validate("DUCK_COUNT", "0"));
     }
 }

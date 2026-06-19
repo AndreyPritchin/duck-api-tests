@@ -41,7 +41,6 @@ public class DuckQuackTest extends DuckQuackClient {
         DuckValidationSoundPayload expectedDuck = new DuckValidationSoundPayload()
                 .sound("moo-moo, moo-moo, moo-moo");
         //Утка в БД с sound: "quack", но фактический результат sound: "moo". В тесте используется проверка на фактическое сообщение
-
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
     }
