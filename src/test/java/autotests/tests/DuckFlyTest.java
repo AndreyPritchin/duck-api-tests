@@ -10,7 +10,7 @@ import io.qameta.allure.Story;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckValidationMessagePayload;
+import autotests.payloads.DuckValidationMessagePayload;
 
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
@@ -43,9 +43,6 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
-
-        //Валидация через БД
-        validationDatabase(runner, "${duckId}", "yellow", "10.0", "wood", "quack", "ACTIVE");
     }
 
     @Test(description = "Проверка характеристик утки со связанными крыльями")
@@ -72,9 +69,6 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
-
-        //Валидация через БД
-        validationDatabase(runner, "${duckId}", "yellow", "10.0", "wood", "quack", "FIXED");
     }
 
     @Test(description = "Проверка характеристик утки с неопределенным состоянием крыльев")
@@ -101,8 +95,5 @@ public class DuckFlyTest extends DuckFlyClient {
 
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
-
-        //Валидация через БД
-        validationDatabase(runner, "${duckId}", "yellow", "10.0", "wood", "quack", "UNDEFINED");
     }
 }

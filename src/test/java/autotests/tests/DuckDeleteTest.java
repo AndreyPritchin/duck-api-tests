@@ -32,5 +32,8 @@ public class DuckDeleteTest extends DuckDeleteClient {
 
         //Валидация ответа resources
         validationJsonResources(runner, HttpStatus.OK, "DeleteDuckTestResources/deleteDuck.json");
+
+        //Проверка удаления через БД
+        validateDeletedDatabase(runner, "${duckId}");
     }
 }

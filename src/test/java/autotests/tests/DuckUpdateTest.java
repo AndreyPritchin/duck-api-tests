@@ -10,7 +10,7 @@ import io.qameta.allure.Story;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckValidationMessagePayload;
+import autotests.payloads.DuckValidationMessagePayload;
 
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 

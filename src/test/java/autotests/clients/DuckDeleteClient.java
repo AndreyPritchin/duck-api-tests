@@ -1,18 +1,12 @@
 package autotests.clients;
 
-import autotests.EndpointConfig;
 import com.consol.citrus.TestCaseRunner;
-import com.consol.citrus.http.client.HttpClient;
 import io.qameta.allure.Step;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+
+import static com.consol.citrus.actions.ExecuteSQLQueryAction.Builder.query;
 import static com.consol.citrus.http.actions.HttpActionBuilder.http;
 
-@ContextConfiguration(classes = {EndpointConfig.class})
 public class DuckDeleteClient extends DuckClient{
-
-    @Autowired
-    protected HttpClient duckService;
 
     //Метод для удаления утки
     @Step("Метод для удаления утки")
@@ -22,5 +16,13 @@ public class DuckDeleteClient extends DuckClient{
                 .send()
                 .delete("/api/duck/delete")
                 .queryParam("id", id));
+    }
+
+    //Метод проверки удаления через БД
+    @Step("Метод проверки удаления через БД")
+    public void validateDeletedDatabase(TestCaseRunner runner, String id) {
+        runner.$(query(testDb)
+                .statement("select COUNT(1) as DUCK_COUNT from duck where ID = " + id)
+                .validate("DUCK_COUNT", "0")); // Ожидаем, что количество равно 0
     }
 }

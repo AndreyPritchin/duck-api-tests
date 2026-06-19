@@ -11,7 +11,6 @@ import io.qameta.allure.Step;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -28,40 +27,6 @@ public class DuckClient extends TestNGCitrusSpringSupport {
 
     @Autowired
     protected SingleConnectionDataSource testDb;
-
-
-    //Методы controller
-
-
-    //Метод для создания утки string
-    @Step("Метод для создания утки string")
-    public void createDuckString(TestCaseRunner runner, String color, double height, String material, String sound, String wingsState) {
-        runner.$(http()
-                .client(duckService)
-                .send()
-                .post("/api/duck/create")
-                .message()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body("{\n" +
-                        "  \"color\": \"" + color + "\",\n" +
-                        "  \"height\": " + height + ",\n" +
-                        "  \"material\": \"" + material + "\",\n" +
-                        "  \"sound\": \"" + sound + "\",\n" +
-                        "  \"wingsState\": \"" + wingsState + "\"\n" +
-                        "}"));
-    }
-
-    //Метод для создания утки payload
-    @Step("Метод для создания утки payload")
-    public void createDuckPayload(TestCaseRunner runner, Object duckCreatePayload) {
-        runner.$(http()
-                .client(duckService)
-                .send()
-                .post("/api/duck/create")
-                .message()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new ObjectMappingPayloadBuilder(duckCreatePayload, new ObjectMapper())));
-    }
 
 
     //Методы валидации
@@ -113,18 +78,59 @@ public class DuckClient extends TestNGCitrusSpringSupport {
                 .message());
     }
 
+    //Метод валидации статус-кода и ПУСТОВО json-сообщения
+    public void validateJsonEmpty(TestCaseRunner runner, HttpStatus status) {
+        runner.$(
+                http()
+                        .client(duckService)
+                        .receive()
+                        .response(status)
+                        .message()
+                        .type(MessageType.PLAINTEXT)
+                        .body("")
+        );
+    }
 
-    //Метод извлечения id утки и запись его в переменную duckId
-    @Step("Метод извлечения id утки и запись его в переменную duckId")
-    public String idExtract(TestCaseRunner runner) {
+    //Метод валидации статус-кода и json-сообщения string. Извлечение id
+    @Step("Метод валидации статус-кода и json-сообщения string. Извлечение id")
+    public String validationJsonStringExtract(TestCaseRunner runner, HttpStatus statusCode, String jsonMessage) {
         runner.$(http()
                 .client(duckService)
                 .receive()
-                .response(HttpStatus.OK)
+                .response(statusCode)
                 .message()
                 .type(MessageType.JSON)
+                .body(jsonMessage)
                 .extract(fromBody().expression("$.id", "duckId")));
-        return("duckId");
+        return ("${duckId}");
+    }
+
+    //Метод валидации статус-кода и json-сообщения resources. Извлечение id
+    @Step("Метод валидации статус-кода и json-сообщения resources. Извлечение id")
+    public String validationJsonResourcesExtract(TestCaseRunner runner, HttpStatus statusCode, String expectedResources) {
+        runner.$(http()
+                .client(duckService)
+                .receive()
+                .response(statusCode)
+                .message()
+                .type(MessageType.JSON)
+                .body(new ClassPathResource(expectedResources))
+                .extract(fromBody().expression("$.id", "duckId")));
+        return ("${duckId}");
+    }
+
+    //Метод валидации статус-кода и json-сообщения payload. Извлечение id
+    @Step("Метод валидации статус-кода и json-сообщения payload. Извлечение id")
+    public String validationJsonPayloadExtract(TestCaseRunner runner, HttpStatus statusCode, Object expectedPayload) {
+        runner.$(http()
+                .client(duckService)
+                .receive()
+                .response(statusCode)
+                .message()
+                .type(MessageType.JSON)
+                .body(new ObjectMappingPayloadBuilder(expectedPayload, new ObjectMapper()))
+                .extract(fromBody().expression("$.id", "duckId")));
+        return ("${duckId}");
     }
 
 

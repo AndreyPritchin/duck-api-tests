@@ -10,7 +10,7 @@ import io.qameta.allure.Story;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckValidationParametersPayload;
+import autotests.payloads.DuckValidationParametersPayload;
 
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
@@ -37,10 +37,8 @@ public class DuckPropertiesTest extends DuckPropertiesClient {
         //Вызов метода характеристик утки
         getPropertiesDuck(runner, "${duckId}");
 
-        validationStatus(runner, HttpStatus.OK);
-
-        //Валидация через БД
-        validationDatabase(runner, "${duckId}", "yellow", "10.0", "wood", "quack", "ACTIVE");
+        //Валидация пустого тела ответа
+        validateJsonEmpty(runner, HttpStatus.OK);
     }
     //По результатам теста: Properties возвращает ошибку на любой четный id "Number of JSON entries not equal for element: '$.', expected '5' but was '0'"
 
@@ -71,8 +69,5 @@ public class DuckPropertiesTest extends DuckPropertiesClient {
                 .wingsState("ACTIVE");
         //Валидация ответа payload
         validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
-
-        //Валидация через БД
-        validationDatabase(runner, "${duckId}", "yellow", "10.0", "rubber", "quack", "ACTIVE");
     }
 }

@@ -7,9 +7,10 @@ import com.consol.citrus.annotations.CitrusTest;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
+import org.springframework.http.HttpStatus;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import payloads.DuckValidationSoundPayload;
+import autotests.payloads.DuckValidationSoundPayload;
 
 import static com.consol.citrus.container.FinallySequence.Builder.doFinally;
 
@@ -40,6 +41,9 @@ public class DuckQuackTest extends DuckQuackClient {
         DuckValidationSoundPayload expectedDuck = new DuckValidationSoundPayload()
                 .sound("moo-moo, moo-moo, moo-moo");
         //Утка в БД с sound: "quack", но фактический результат sound: "moo". В тесте используется проверка на фактическое сообщение
+
+        //Валидация ответа payload
+        validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
     }
 
     @Test(description = "Проверка кряканья утки с нечетным id")
@@ -63,5 +67,8 @@ public class DuckQuackTest extends DuckQuackClient {
         //Вызов метода для создания параметров утки payload
         DuckValidationSoundPayload expectedDuck = new DuckValidationSoundPayload()
                 .sound("quack-quack, quack-quack, quack-quack");
+
+        //Валидация ответа payload
+        validationJsonPayload(runner, HttpStatus.OK, expectedDuck);
     }
 }
