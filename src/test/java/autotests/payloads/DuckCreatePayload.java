@@ -11,9 +11,6 @@ import lombok.experimental.Accessors;
 public class DuckCreatePayload {
 
     @JsonProperty
-    private String id;
-
-    @JsonProperty
     private String color;
 
     @JsonProperty
